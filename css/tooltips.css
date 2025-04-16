@@ -1,0 +1,107 @@
+/* Styles pour les infobulles personnalisées */
+
+.custom-tooltip {
+  background: rgba(20, 20, 35, 0.95);
+  border: 2px solid #64ffda;
+  border-radius: 8px;
+  padding: 0;
+  font-size: 0.9rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+  max-width: 280px;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Animation d'apparition */
+@keyframes tooltip-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Styles pour le contenu des infobulles */
+.stat-tooltip {
+  padding: 10px 14px;
+}
+
+.stat-tooltip .stat-label {
+  display: block;
+  color: #64ffda;
+  font-weight: bold;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(100, 255, 218, 0.3);
+  padding-bottom: 5px;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
+.stat-tooltip .stat-value {
+  font-weight: bold;
+  color: white;
+  font-size: 1.1rem;
+}
+
+.stat-tooltip .stat-percentage {
+  margin-left: 8px;
+  color: #ffce00;
+  font-weight: bold;
+}
+
+.stat-tooltip .stat-points {
+  margin-left: 8px;
+  color: #64ffda;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.stat-tooltip .stat-total {
+  margin-top: 8px;
+  padding-top: 5px;
+  border-top: 1px dashed rgba(100, 255, 218, 0.3);
+  font-weight: bold;
+  color: #ffce00;
+}
+
+.stat-tooltip .stat-type {
+  color: #9e9eff;
+  font-weight: normal;
+  display: inline-block;
+  width: 80px;
+  opacity: 0.9;
+}
+
+.stat-tooltip div {
+  margin-bottom: 5px;
+}
+
+.stat-tooltip .negative {
+  color: #ff4d4d;
+}
+
+/* Effet de brillance sur le bord */
+.custom-tooltip::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 8px;
+  background: linear-gradient(45deg, #64ffda, transparent, #9e9eff, transparent, #64ffda);
+  background-size: 400% 400%;
+  z-index: -1;
+  animation: border-shine 3s ease infinite;
+  opacity: 0.5;
+}
+
+@keyframes border-shine {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}

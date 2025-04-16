@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PBA Excel to JSON Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        #dropArea {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #dropArea.highlight {
+            background-color: #f7f7f7;
+            border-color: #4a90e2;
+        }
+        #fileInput {
+            display: none;
+        }
+        .button {
+            background-color: #4a90e2;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #357ae8;
+        }
+        .button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        #results {
+            display: none;
+        }
+        #downloadSection {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        pre {
+            background-color: #f7f7f7;
+            padding: 10px;
+            border-radius: 4px;
+            overflow: auto;
+            max-height: 300px;
+        }
+        #status {
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <h1>PBA Excel to JSON Converter</h1>
+    
+    <div class="container">
+        <div class="card">
+            <h2>1. Sélectionnez un fichier Excel</h2>
+            <div id="dropArea">
+                <p>Glissez-déposez votre fichier Excel ici<br>ou</p>
+                <input type="file" id="fileInput" accept=".xlsx, .xls">
+                <button class="button" onclick="document.getElementById('fileInput').click()">Parcourir...</button>
+                <p class="small">Format accepté: .xlsx</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>2. Transformation</h2>
+            <p>Cliquez sur le bouton ci-dessous pour transformer le fichier Excel et le convertir en JSON.</p>
+            <button id="processButton" class="button" disabled>Transformer & Convertir</button>
+            <div class="loader" id="loader"></div>
+            <div id="status"></div>
+        </div>
+
+        <div id="results" class="card">
+            <h2>3. Résultats</h2>
+            <p>Transformation terminée ! Vous pouvez télécharger les fichiers ci-dessous:</p>
+            
+            <div id="downloadSection">
+                <button id="downloadExcel" class="button">Télécharger Excel transformé</button>
+                <button id="downloadJson" class="button">Télécharger JSON</button>
+            </div>
+
+            <h3>Aperçu JSON:</h3>
+            <pre id="jsonPreview"></pre>
+        </div>
+    </div>
+
+    <!-- Chargement de la bibliothèque ExcelJS -->
+    <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+    <!-- Chargement du script PBA Excel Processor -->
+    <script src="pba_excel_processor.js"></script>
+    
+    <script>
+        // Variables globales pour stocker les résultats
+        let selectedFile = null;
+        let processedWorkbook = null;
+        let processedJsonData = null;
+        let excelBlob = null;
+        let jsonBlob = null;
+
+        // Éléments DOM
+        const fileInput = document.getElementById('fileInput');
+        const dropArea = document.getElementById('dropArea');
+        const processButton = document.getElementById('processButton');
+        const resultsSection = document.getElementById('results');
+        const downloadExcelButton = document.getElementById('downloadExcel');
+        const downloadJsonButton = document.getElementById('downloadJson');
+        const jsonPreview = document.getElementById('jsonPreview');
+        const loader = document.getElementById('loader');
+        const statusDiv = document.getElementById('status');
+
+        // Événements pour le drag & drop
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight() {
+            dropArea.classList.add('highlight');
+        }
+
+        function unhighlight() {
+            dropArea.classList.remove('highlight');
+        }
+
+        // Gestion du dépôt de fichier
+        dropArea.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+
+        // Gestion de la sélection de fichier via input
+        fileInput.addEventListener('change', function() {
+            handleFiles(this.files);
+        });
+
+        function handleFiles(files) {
+            if (files.length > 0) {
+                selectedFile = files[0];
+                if (selectedFile.name.endsWith('.xlsx') || selectedFile.name.endsWith('.xls')) {
+                    processButton.disabled = false;
+                    statusDiv.textContent = `Fichier sélectionné: ${selectedFile.name}`;
+                    statusDiv.style.color = 'black';
+                } else {
+                    selectedFile = null;
+                    processButton.disabled = true;
+                    statusDiv.textContent = "Format de fichier non pris en charge. Veuillez sélectionner un fichier Excel (.xlsx, .xls).";
+                    statusDiv.style.color = 'red';
+                }
+            }
+        }
+
+        // Gestion du bouton de traitement
+        processButton.addEventListener('click', async function() {
+            if (!selectedFile) return;
+            
+            // Afficher le loader et masquer les résultats
+            loader.style.display = 'block';
+            resultsSection.style.display = 'none';
+            processButton.disabled = true;
+            statusDiv.textContent = "Traitement en cours...";
+            statusDiv.style.color = 'black';
+            
+            try {
+                // Traiter le fichier Excel
+                const result = await PBAExcelProcessor.processExcel(selectedFile);
+                processedWorkbook = result.workbook;
+                processedJsonData = result.jsonData;
+                
+                // Générer les blobs pour le téléchargement
+                excelBlob = await PBAExcelProcessor.saveWorkbook(processedWorkbook);
+                jsonBlob = await PBAExcelProcessor.saveJson(processedJsonData);
+                
+                // Afficher un aperçu des données JSON
+                jsonPreview.textContent = JSON.stringify(processedJsonData.slice(0, 5), null, 2);
+                
+                // Afficher la section des résultats
+                resultsSection.style.display = 'block';
+                statusDiv.textContent = "Traitement terminé avec succès!";
+                statusDiv.style.color = 'green';
+            } catch (error) {
+                console.error("Erreur lors du traitement:", error);
+                statusDiv.textContent = "Erreur lors du traitement: " + error.message;
+                statusDiv.style.color = 'red';
+            } finally {
+                loader.style.display = 'none';
+                processButton.disabled = false;
+            }
+        });
+
+        // Gestion des boutons de téléchargement
+        downloadExcelButton.addEventListener('click', function() {
+            if (excelBlob) {
+                downloadBlob(excelBlob, 'Data-transformed-PBA.xlsx');
+            }
+        });
+
+        downloadJsonButton.addEventListener('click', function() {
+            if (jsonBlob) {
+                downloadBlob(jsonBlob, 'Data-PBA.json');
+            }
+        });
+
+        // Fonction utilitaire pour télécharger un blob
+        function downloadBlob(blob, fileName) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 0);
+        }
+    </script>
+</body>
+</html>

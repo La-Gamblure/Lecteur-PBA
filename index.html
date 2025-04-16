@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PBA - Padtional Basketball Association</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/scoreboard.css">
+    <link rel="stylesheet" href="css/commentary.css">
+    <link rel="stylesheet" href="css/stats-table.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/tooltips.css">
+    <link rel="stylesheet" href="css/file-upload.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <img src="logo-pba.svg" alt="PBA Logo">
+        </div>
+        
+        <div class="navbar-controls">
+            <div class="teams-selector">
+                <div class="team-selector">
+                    <select id="team-a-select" class="team-select">
+                        <option value="">Home Team</option>
+                        <!-- Équipes chargées dynamiquement par le JavaScript -->
+                    </select>
+                </div>
+
+                <div class="vs-separator">VS</div>
+
+                <div class="team-selector">
+                    <select id="team-b-select" class="team-select">
+                        <option value="">Away Team</option>
+                        <!-- Équipes chargées dynamiquement par le JavaScript -->
+                    </select>
+                </div>
+            </div>
+
+            <div class="json-upload">
+                <div class="file-input-container">
+                    <input type="file" id="json-upload" accept=".json" />
+                    <label for="json-upload" class="file-input-label">Charger un match (JSON)</label>
+                </div>
+            </div>
+            <div class="nav-items">
+                <a href="excel-converter.html" class="nav-item">Convertisseur Excel</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="main-content">
+            <!-- Scoreboard Section -->
+            <section class="section">
+                <div class="scoreboard">
+                    <div class="team team-a" id="team-a-box">
+                        <div class="team-logo">
+                            <img src="https://placehold.co/100x100?text=A" alt="Team A Logo" class="team-logo-img" id="team-a-logo">
+                            <div class="ball-container">
+                                <img src="img/basketball.svg" alt="Basketball" class="basketball" id="team-a-ball">
+                            </div>
+                        </div>
+                        <div class="team-score" id="team-a-score">0</div>
+                        <span class="possession-indicator" id="possession-a">🏀</span>
+                        <div class="manga-effect team-a-manga" id="team-a-manga"></div>
+                    </div>
+                    
+                    <div class="game-info">
+                        <div class="quarter" id="quarter">Q1</div>
+                        <div class="timer" id="timer">12:00</div>
+                        <div class="controls">
+                            <button id="play-button" disabled>
+                                <span class="control-icon">▶</span>
+                            </button>
+                            <button id="pause-button" disabled>
+                                <span class="control-icon">⏸</span>
+                            </button>
+                            <button id="reset-button" disabled>
+                                <span class="control-icon">⟳</span>
+                            </button>
+                            <div class="speed-control">
+                                <select id="playback-speed" disabled>
+                                    <option value="0.5">x0.5</option>
+                                    <option value="1" selected>x1</option>
+                                    <option value="1.5">x1.5</option>
+                                    <option value="2">x2</option>
+                                    <option value="4">x4</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="step-counter" id="step-counter">
+                            <span id="current-step">0</span>/<span id="total-steps">0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="team team-b" id="team-b-box">
+                        <div class="team-logo">
+                            <img src="https://placehold.co/100x100?text=B" alt="Team B Logo" class="team-logo-img" id="team-b-logo">
+                            <div class="ball-container">
+                                <img src="img/basketball.svg" alt="Basketball" class="basketball" id="team-b-ball">
+                            </div>
+                        </div>
+                        <div class="team-score" id="team-b-score">0</div>
+                        <span class="possession-indicator" id="possession-b">🏀</span>
+                        <div class="manga-effect team-b-manga" id="team-b-manga"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Commentary Section -->
+            <section class="section">
+                <div class="commentary-box">
+                    <div class="current-action">
+                        <span class="action-player">BuzzerBeater</span>
+                        <span class="action-type">Shoot</span>
+                        <span class="action-result success">Réussi</span>
+                    </div>
+                </div>
+            </section>
+
+           <!-- Stats Table Section -->
+<section class="section">
+    <div class="stats-container">
+      <table id="stats-table" class="stats-table">
+  
+        <!-- =========  ÉQUIPE A  ========= -->
+        <tr class="team-a player-row">
+          <td class="team-label" rowspan="5">EQUIPE A</td>
+          <td class="player-name">Joueur A1</td>
+          <td id="A1-Points">0</td>
+          <td id="A1-3-Points">0</td>
+          <td id="A1-Rebounds">0</td>
+          <td id="A1-Assist">0</td>
+          <td id="A1-Blocks">0</td>
+          <td id="A1-Steals">0</td>
+          <td id="A1-TurnOvers">0</td>
+          <td id="A1-DD">0</td>
+          <td id="A1-TD">0</td>
+          <td id="A1-Total">0</td>
+        </tr>
+  
+        <tr class="team-a player-row">
+          <td class="player-name">Joueur A2</td>
+          <td id="A2-Points">0</td>
+          <td id="A2-3-Points">0</td>
+          <td id="A2-Rebounds">0</td>
+          <td id="A2-Assist">0</td>
+          <td id="A2-Blocks">0</td>
+          <td id="A2-Steals">0</td>
+          <td id="A2-TurnOvers">0</td>
+          <td id="A2-DD">0</td>
+          <td id="A2-TD">0</td>
+          <td id="A2-Total">0</td>
+        </tr>
+  
+        <tr class="team-a player-row">
+          <td class="player-name">Joueur A3</td>
+          <td id="A3-Points">0</td>
+          <td id="A3-3-Points">0</td>
+          <td id="A3-Rebounds">0</td>
+          <td id="A3-Assist">0</td>
+          <td id="A3-Blocks">0</td>
+          <td id="A3-Steals">0</td>
+          <td id="A3-TurnOvers">0</td>
+          <td id="A3-DD">0</td>
+          <td id="A3-TD">0</td>
+          <td id="A3-Total">0</td>
+        </tr>
+  
+        <tr class="team-a player-row">
+          <td class="player-name">Joueur A4</td>
+          <td id="A4-Points">0</td>
+          <td id="A4-3-Points">0</td>
+          <td id="A4-Rebounds">0</td>
+          <td id="A4-Assist">0</td>
+          <td id="A4-Blocks">0</td>
+          <td id="A4-Steals">0</td>
+          <td id="A4-TurnOvers">0</td>
+          <td id="A4-DD">0</td>
+          <td id="A4-TD">0</td>
+          <td id="A4-Total">0</td>
+        </tr>
+  
+        <tr class="team-a player-row">
+          <td class="player-name">Joueur A5</td>
+          <td id="A5-Points">0</td>
+          <td id="A5-3-Points">0</td>
+          <td id="A5-Rebounds">0</td>
+          <td id="A5-Assist">0</td>
+          <td id="A5-Blocks">0</td>
+          <td id="A5-Steals">0</td>
+          <td id="A5-TurnOvers">0</td>
+          <td id="A5-DD">0</td>
+          <td id="A5-TD">0</td>
+          <td id="A5-Total">0</td>
+        </tr>
+  
+        <!-- Ligne d’intitulés de stats -->
+        <tr class="stats-row">
+          <td class="stats-label">STATS</td>
+          <td>Players</td>
+          <td>PTS</td>
+          <td>3PT</td>
+          <td>RBD</td>
+          <td>AST</td>
+          <td>BLK</td>
+          <td>STL</td>
+          <td>TO</td>
+          <td>DD</td>
+          <td>TD</td>
+          <td>TOTAL</td>
+        </tr>
+  
+        <!-- =========  ÉQUIPE B  ========= -->
+        <tr class="team-b player-row">
+          <td class="team-label" rowspan="5">EQUIPE B</td>
+          <td class="player-name">Joueur B1</td>
+          <td id="B1-Points">0</td>
+          <td id="B1-3-Points">0</td>
+          <td id="B1-Rebounds">0</td>
+          <td id="B1-Assist">0</td>
+          <td id="B1-Blocks">0</td>
+          <td id="B1-Steals">0</td>
+          <td id="B1-TurnOvers">0</td>
+          <td id="B1-DD">0</td>
+          <td id="B1-TD">0</td>
+          <td id="B1-Total">0</td>
+        </tr>
+  
+        <tr class="team-b player-row">
+          <td class="player-name">Joueur B2</td>
+          <td id="B2-Points">0</td>
+          <td id="B2-3-Points">0</td>
+          <td id="B2-Rebounds">0</td>
+          <td id="B2-Assist">0</td>
+          <td id="B2-Blocks">0</td>
+          <td id="B2-Steals">0</td>
+          <td id="B2-TurnOvers">0</td>
+          <td id="B2-DD">0</td>
+          <td id="B2-TD">0</td>
+          <td id="B2-Total">0</td>
+        </tr>
+  
+        <tr class="team-b player-row">
+          <td class="player-name">Joueur B3</td>
+          <td id="B3-Points">0</td>
+          <td id="B3-3-Points">0</td>
+          <td id="B3-Rebounds">0</td>
+          <td id="B3-Assist">0</td>
+          <td id="B3-Blocks">0</td>
+          <td id="B3-Steals">0</td>
+          <td id="B3-TurnOvers">0</td>
+          <td id="B3-DD">0</td>
+          <td id="B3-TD">0</td>
+          <td id="B3-Total">0</td>
+        </tr>
+  
+        <tr class="team-b player-row">
+          <td class="player-name">Joueur B4</td>
+          <td id="B4-Points">0</td>
+          <td id="B4-3-Points">0</td>
+          <td id="B4-Rebounds">0</td>
+          <td id="B4-Assist">0</td>
+          <td id="B4-Blocks">0</td>
+          <td id="B4-Steals">0</td>
+          <td id="B4-TurnOvers">0</td>
+          <td id="B4-DD">0</td>
+          <td id="B4-TD">0</td>
+          <td id="B4-Total">0</td>
+        </tr>
+  
+        <tr class="team-b player-row">
+          <td class="player-name">Joueur B5</td>
+          <td id="B5-Points">0</td>
+          <td id="B5-3-Points">0</td>
+          <td id="B5-Rebounds">0</td>
+          <td id="B5-Assist">0</td>
+          <td id="B5-Blocks">0</td>
+          <td id="B5-Steals">0</td>
+          <td id="B5-TurnOvers">0</td>
+          <td id="B5-DD">0</td>
+          <td id="B5-TD">0</td>
+          <td id="B5-Total">0</td>
+        </tr>
+  
+      </table>
+    </div>
+  </section>
+
+        </div>
+    </div>
+    <!-- Chargement du JavaScript -->    
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    
+    <!-- Charge le générateur en module : crée window.CommentaryGenerator -->
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/exceljs@4.3.0/dist/exceljs.min.js"></script>
+    <script src="pba_excel_processor.js"></script>
+    <script type="module" src="js/commentary-generator.js"></script>
+    <script src="js/json-processor.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/animations.js"></script>
+    
+    <script>
+        // Les écouteurs d'événements sont maintenant gérés dans json-processor.js
+        // Ils sont attachés automatiquement lors du chargement de la page
+    </script>
+</body>
+</html>
