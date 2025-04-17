@@ -1,0 +1,368 @@
+/* Scoreboard styling */
+.scoreboard {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    height: 80vh;
+    min-height: 350px;
+    max-height: 95vh;
+    width: 100%;
+    margin: auto;
+    background-color: #1e1e2d;
+    color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    background-image: linear-gradient(to right, rgba(66, 99, 235, 0.05), rgba(236, 64, 122, 0.05));
+    position: relative;
+}
+
+.scoreboard-col {
+    flex: 1 1 0%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    max-width: 33vw;
+    /* margin: 0 2vw;  ENLEVÉ pour éviter le décalage */
+}
+
+/* Empêche le contenu de dépasser la colonne, même avec padding/margin */
+.scoreboard-col > * {
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.scoreboard-col {
+    flex: 1 1 0%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    margin: 0 2vw;
+    max-width: 33vw;
+}
+
+/* Empêche le contenu de dépasser la colonne, même avec padding/margin */
+.scoreboard-col > * {
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.scoreboard-col {
+    flex: 1 1 0%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 33.33%;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+/* Empêche le contenu de dépasser la colonne, même avec padding/margin */
+.scoreboard-col > * {
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Bandeaux latéraux du scoreboard */
+.scoreboard::before,
+.scoreboard::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 15px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* Si besoin, assure que le scoreboard n'a pas overflow:hidden qui masque les bandeaux */
+
+/* Bandeau gauche - couleur équipe A */
+.scoreboard::before {
+    left: 0;
+    background-color: #6f6fd6; /* Même couleur que team-a */
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+/* Bandeau droit - couleur équipe B */
+.scoreboard::after {
+    right: 0;
+    background-color: #d65f5f; /* Même couleur que team-b */
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+/* Team styling */
+.team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 30%;
+}
+
+.team-logo {
+    width: 200px;
+    height: 200px;
+    background-color: white;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    margin-bottom: 10px;
+    margin-top: 40px; /* Ajout d'espace au-dessus du logo */
+}
+
+.team-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* Styles pour le ballon de basketball */
+.ball-container {
+    position: absolute;
+    top: -10px;
+    width: 40px;
+    height: 40px;
+    z-index: 10;
+    transition: opacity 0.3s ease;
+}
+
+.team-a .ball-container {
+    right: -20px;
+}
+
+.team-b .ball-container {
+    left: -20px;
+}
+
+.basketball {
+    width: 100%;
+    height: 100%;
+    opacity: 0; /* Par défaut, les ballons sont invisibles */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    /* Aucune image de fond ici, l'image est définie dans le HTML */
+}
+
+.basketball.active {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.team.has-possession .possession-indicator {
+    display: block;  /* visible quand la classe est là */
+    animation: bounce .6s infinite alternate;
+}
+
+@keyframes bounce { 
+    from { transform: translateY(-2px); } 
+    to { transform: translateY(2px); } 
+}
+
+/* Styles pour les noms d'équipes supprimés - les logos suffisent */
+
+.team-score {
+    font-size: 10rem; /* Taille augmentée à 6rem */
+    font-weight: 800;
+    color: #fff;
+    min-width: 70px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+
+/* Game info styling */
+.game-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40%;
+}
+
+.quarter {
+    color: #64ffda;
+    font-size: 4.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(100, 255, 218, 0.4);
+}
+
+.timer {
+    background-color: #2a2a40;
+    border-radius: 8px;
+    padding: 0.5rem 1.2rem;
+    margin-bottom: 20px;
+    font-size: 4.5rem;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+    border: 1px solid rgba(100, 255, 218, 0.3);
+    box-shadow: 0 0 15px rgba(100, 255, 218, 0.1);
+}
+
+/* Controls styling */
+.controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* Step counter styling */
+.step-counter {
+    font-size: 0.9rem;
+    color: #64ffda;
+    margin-top: 10px;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.controls button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background-color: #333;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#play-button {
+background-color: #64ffda;
+color: #1e1e2d;
+}
+
+#play-button:hover:not(:disabled) {
+background-color: #80ffdf;
+box-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+}
+
+.controls button:hover:not(:disabled) {
+background-color: #3a3a50;
+transform: scale(1.1);
+}
+
+.controls button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.control-icon {
+    font-size: 1.2rem;
+}
+
+/* Contrôleur de vitesse de lecture */
+.speed-control {
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.team.has-possession {
+    background-color: rgba(255, 215, 0, 0.15);
+}
+
+/* Animation pour la mise en évidence des statistiques incrémentées */
+@keyframes stat-highlight {
+    0% { background-color: rgba(76, 175, 80, 0.1); }
+    50% { background-color: rgba(76, 175, 80, 0.7); }
+    100% { background-color: rgba(76, 175, 80, 0.1); }
+}
+
+.stat-updated {
+    animation: stat-highlight 1s ease-in-out;
+    font-weight: bold;
+    color: #006400;
+}
+
+#playback-speed {
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#playback-speed:hover:not(:disabled) {
+    background-color: #3a3a50;
+}
+
+#playback-speed:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Player badge styling for commentary */
+.player {
+    display: inline-block;
+    padding: 0.15em 0.6em;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 1em;
+    margin: 0 2px;
+    color: #fff;
+    box-shadow: 0 1px 4px rgba(30,30,45,0.10);
+    vertical-align: middle;
+    line-height: 1.3;
+    transition: background 0.2s;
+}
+.player.team-left {
+    background-color: #6f6fd6; /* matches scoreboard left banner */
+}
+.player.team-right {
+    background-color: #d65f5f; /* matches scoreboard right banner */
+}
+.player.team-a {
+    background-color: #6f6fd6;
+}
+.player.team-b {
+    background-color: #d65f5f;
+}
+
+/* Manga effect placeholder */
+.manga-effect {
+    height: 20px;
+    margin-top: 10px;
+}

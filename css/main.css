@@ -1,0 +1,112 @@
+/* Main CSS styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+}
+
+/* Option 1: Fond sombre actuel (activé) */
+html, body {
+    height: 100%;
+    background-color: #4f045f;
+    color: #e0e0e0;
+    line-height: 1.6;
+    background-image: linear-gradient(to bottom right, #121212, #1e1e2d);
+    /* Désactiver le défilement uniquement sur les petits écrans */
+    overflow-x: hidden;
+    min-width: 1200px; /* Largeur minimale pour garantir que tout soit visible */
+}
+
+/* Flex layout for entire page */
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navbar: 1/10 of viewport height */
+.navbar {
+    height: 10vh;
+    min-height: 60px;
+    overflow: hidden;
+}
+
+.container {
+    width: 100%;
+    max-width: 1500px;
+    min-width: 0;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem; /* Ajoute un espace vertical entre les sections (commentaire, stats, etc.) */
+}
+
+.section {
+    width: 100%;
+    margin-bottom: 0;
+    /* On laisse le gap gérer l'espacement */
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    /* On retire la hauteur forcée pour laisser le contenu respirer */
+    /* min-height: 700px; */
+    /* height: 90vh; */
+}
+
+/* Scoreboard: 3/10 of viewport height */
+.section:nth-child(1) {
+    height: 35vh;
+    min-height: 180px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+/* Commentary: 1/10 of viewport height */
+.section:nth-child(2) {
+    height: 10vh;
+    min-height: 60px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+/* Stats Table: 5/10 of viewport height */
+.section:nth-child(3) {
+    height: 45vh;
+    min-height: 220px;
+    overflow-y: auto;
+    margin-bottom: 0;
+}
+
+/* Make sure child elements take full height */
+.scoreboard, .commentary-box, .stats-container {
+    height: 100%;
+}
+
+.scoreboard {
+    display: flex;
+    align-items: center;
+}
+
+/* Mode desktop seulement - pas d'adaptation pour mobile */
+@media (max-width: 1199px) {
+    body {
+        overflow-x: auto; /* Permettre le défilement horizontal sur petit écran */
+    }
+    .container {
+        padding: 0 0.5rem;
+        margin: 0;
+        /* Forcer l'affichage complet même sur petit écran */
+        transform: scale(1);
+        transform-origin: top left;
+    }
+}
