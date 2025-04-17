@@ -29,106 +29,173 @@ export const ACTION_EMOJI = {
   'TD'  : '💪',
   'PASS': ''
 };
-
 export const COMMENT_TEMPLATES = {
-  '2PT': {
+  "2PT": {
     success: [
-      '{emoji} BAM ! {player} transperce le filet à 2 pts !',
-      '{emoji} Joli jumper de {player} pour 2 points.',
-      '{player} claque un dunk puissant ! {emoji} {emoji} ',
-      '${player} dégaine à mi-distance : c\'est dedans ! 🔥',
-      '{player} transperce le filet à 2 pts !',
-      'Joli jumper de {player} pour 2 points.',
-      '{player} claque un dunk puissant ! 💥',
-      '${player} dégaine à mi-distance : c\'est dedans ! 🔥',
-      '{player} a enfin trouvé le panier, miracle ! 🙄'
+      "Magnifique ! {player} à mi-distance !",
+      "Joli fadeaway de {player} pour 2 points.",
+      "BAM ! {player} transperce le filet !",
+      "{player} avec l'autorité au cercle !",
+      "{player} claque un dunk puissant ! 💥",
+      "{player} en suspension, c'est dedans ! 🔥",
+      "{player} parfaitement exécuté à 2 pts !",
+      "Belle finition de {player} près du cercle !",
+      "{player} au dunk ! Spectaculaire ! 💥"
     ],
     fail: [
-      '{emoji} {player} manque son jumper à 2 pts.',
-      '{player} dégaine à mi -distance , mais ça ne rentre pas.',
-      'Tentative de {player} qui ne trouve pas le fond du panier.',
-      '{player} manque son jumper à 2 pts.',
-      'Tentative de {player} qui ne trouve pas le fond du panier.',
-      'Shoot CA TA STRO PHI QUE de {player} !',
-      'Comment {player} a-t-il pu louper ça  ?! 😨',
-      '{player} rate son layup... 😕',
-      'Ce n\'est pas possible ! faut s\'entrainer là {player} !',
-      'Loupé de {player} ! Faut s\'entrainer !',
-      'Le tir de {player} rebondit sur l\'arceau',
-      'Airball de {player} ! 💨'
+      "{player} manque son tir à mi-distance.",
+      "Tentative de {player} qui rebondit sur le cercle.",
+      "Tir très compliqué de {player} ! 🤦",
+      "{player} manque l'immanquable ! 😱",
+      "{player} rate son lay-up... 😤",
+      "Oh {player}, il faut faire mieux que ça !",
+      "Raté pour {player} ! Il grimace !",
+      "Le tir de {player} rebondit sur l'anneau",
+      "Airball complet de {player} ! 💨"
     ],
     block: [
-      '{player} se fait contrer ! 🖐️',
-      'Contre monstrueux sur {player} !',
-      '{player} repoussé au moment du tir !',
-      '{player} voit son tir refusé ! 🛑',
-      'La défense dit non à {player} !'
+      "{player} se fait contrer sèchement ! 🖐️",
+      "Contre autoritaire sur {player} !",
+      "{player} repoussé au moment du tir !",
+      "{player} voit son tir stoppé net ! 🛑"
     ]
   },
-  '3PT': {
+  "3PT": {
     success: [
-      '{emoji} BANG ! {player} au‑delà de l’arc !',
-      '{emoji} Quel shoot à 3 pts de {player} !',
-      "BANG ! {player} pour 3 points et ça rentre! 💣",
-      "Quel shoot à 3 pts de {player} !",
-      "{player} fait lever la salle à 3 pts ! 🙌",
-      "Ficelle pure pour {player} ! 🎯",
+      "BANG ! {player} ajoute 3 points !",
+      "Superbe ! {player} à 3 points !",
+      "BANG ! {player} dans le money time ! 💣",
+      "{player} fait lever la salle à 3 points ! 🙌",
+      "À la manière de Curry pour {player} ! 🎯",
+      "{player} en confiance totale de loin ! 🔥",
       "{player} a fermé les yeux et ça rentre... quelle chance ! 🍀"
     ],
     fail: [
-      '{emoji} {player} trop court derrière l’arc.',
-      '{player} de loin, mais ça ne rentre pas.',
-      "{player} trop court derrière la ligne à 3pts.",
-      "{player} de loin, mais ça ne rentre pas",
+      "{player} trop court aux 3 points.",
+      "{player} de loin, et c'est manqué.",
+      "{player} airball à 3 points, c'est difficile.",
+      "{player} dans le money time, mais ça ne rentre pas",
+      "La tentative lointaine de {player} sur le cercle",
+      "{player} force son tir à 3 points",
       "La tentative lointaine de {player} ricoche",
       "{player} force son tir à 3, sans succès",
       "Raté ! il est temps que {player} dépense des $PAD !",
-      'Le triple de {player} fait long feu'
+      "Encore raté ! {player} doit retrouver sa main !",
+      "Le triple de {player} ne trouve pas la cible"
     ],
     block: [
-      '{emoji} {player} contré à 3 pts !',
-      '{emoji} Le tir longue distance de {player} est rejeté !',
-      '{player} contré à 3 pts ! 🖐️',
-      'Le tir longue distance de {player} est rejeté !',
-      '{player} se fait éteindre à 3 pts !',
-      'La main adverse sur le tir de {player} !',
-      'Tentative à 3 de {player} repoussée !'
+      "{player} contré à 3 pts !",
+      "Le tir de {player} est rejeté !",
+      "{player} se fait contrer ! 🖐️",
+      "Le shooteur {player} est neutralisé !",
+      "{player} se fait éteindre sur sa tentative !",
+      "Grosse contestation sur le tir de {player} !",
+      "La défense monte sur {player} !"
+    ]
+  },
+  "RBD": {
+    neutral: [
+      "Rebond capté par {player} !",
+      "{player} s'impose au rebond !",
+      "{player} arrache le ballon au rebond !"
+    ]
+  },
+  "BLK": {
+    neutral: [
+      "Contre magistral de {player} !",
+      "{player} dit « pas dans ma raquette ! »",
+      "{player} impose sa loi défensive !",
+      "{player} refuse le tir !"
+    ]
+  },
+  "STL": {
+    neutral: [
+      "Interception de {player} !",
+      "{player} subtilise le ballon !",
+      "{player} avec les mains baladeuses !",
+      "c'est parfaitement anticipé par {player} ! 🥷"
+    ]
+  },
+  "POS": {
+    self: [
+      "{from} temporise... 🤔",
+      "{from} feinte et garde le ballon",
+      "{from} en pleine hésitation",
+      "{from} feinte la passe et se ravise",
+      "{from} hésite...",
+      "{from} sans solution, faut l'aider !"
+    ],
+    neutral: [
+      "Superbe passe de {from} pour {to}",
+      "{from} ➡️ {to}",
+      "{from} trouve {to} dans le corner",
+      "{from} sert {to}",
+      "🏀 {from} pour l'alley-oop de {to} !",
+      '{player} de loin, et c\'est manqué.',
+      "{player} airball à 3 points, c\'est difficile.",
+      "{player} dans le money time, mais ça ne rentre pas",
+      "La tentative lointaine de {player} sur le cercle",
+      "{player} force son tir à 3 points",
+      "La tentative lointaine de {player} ricoche",
+      "{player} force son tir à 3, sans succès",
+      "Raté ! il est temps que {player} dépense des $PAD !",
+      "Encore raté ! {player} doit retrouver sa main !",
+      'Le triple de {player} ne trouve pas la cible'
+    ],
+    block: [
+      '{player} contré à 3 pts !',
+      'Le tir de {player} est rejeté !',
+      '{player} se fait contrer ! 🖐️',
+      'Le shooteur {player} est neutralisé !',
+      '{player} se fait éteindre sur sa tentative !',
+      'Grosse contestation sur le tir de {player} !',
+      'La défense monte sur {player} !'
     ]
   },
   'RBD': {
     neutral: [
-      '{emoji} Rebond capté par {player} !',
-      '{player} s’impose au rebond'
-    ]
+      'Rebond capté par {player} !',
+      '{player} s\'impose au rebond !',
+      '{player} arrache le ballon au rebond !',
+     ]
   },
    'BLK': {
     neutral: [
-      '{emoji} Contre de {player} !',
-      '{player} dit « non, non, non ! »'
+      'Contre magistral de {player} !',
+      '{player} dit « pas dans ma raquette ! »',
+      '{player} impose sa loi défensive !',
+      '{player} refuse le tir !'
     ]
   },
   'STL': {
     neutral: [
-      '{emoji} Interception de {player} !',
-      '{player} vole la balle !'
+      'Interception de {player} !',
+      '{player} subtilise le ballon !',
+      '{player} avec les mains baladeuses !',
+      'c\'est parfaitement anticipé par {player} ! 🥷'
     ]
   },
   'POS': {
+    self: [
+      '{from} temporise... 🤔',
+      '{from} feinte et garde le ballon',
+      '{from} en pleine hésitation',
+      '{from} feinte la passe et se ravise',
+      '{from} hésite...',
+      '{from} sans solution, faut l\'aider !'
+    ],
     neutral: [
-      'Belle passe de {from} vers {to}',
+      'Superbe passe de {from} pour {to}',
       '{from} ➡️ {to}',
-      '{from} pour {to}',
-      '{from} passe à {to}',
-      '🏀 {from} vers {to} !',
+      '{from} trouve {to} dans le corner',
       '{from} sert {to}',
-      'Ballon de {from} à {to} ✨',
-      '{from} trouve {to} !',
-      'Passe de {from} pour {to}',
-      '{from} distribue à {to}'
+      '🏀 {from} pour l\'alley-oop de {to} !',
+      '{from} avec la passe aveugle pour {to}',
+      'Caviar de {from} à {to} ✨',
+      '{from} parfaitement donné à {to} !'
     ]
   }
-};
-
+};  
 /* ---------------------- 2.  Utilitaires ------------------------------- */
 
 const pick = arr => arr[Math.floor(Math.random() * arr.length)];
@@ -288,9 +355,15 @@ export function generateCommentary(play) {
     const toClass   = (toTeam || '').toUpperCase() === 'A' ? 'team-a'
                      : (toTeam || '').toUpperCase() === 'B' ? 'team-b'
                      : '';
-    sentence = sentence
+    // passe à soi‑même ?
+    const samePlayer = from && to && from === to;
+    const chosenTpls = samePlayer
+        ? COMMENT_TEMPLATES.POS.self
+        : templates;
+
+    sentence = pick(chosenTpls)
       .replace('{from}', `<span class=\"player ${fromClass}\">${from}</span>`)
-      .replace('{to}', `<span class=\"player ${toClass}\">${to}</span>`);
+      .replace('{to}',   `<span class=\"player ${toClass}\">${to}</span>`);
   } else {
     // Determine team class for player
     let teamClass = '';
