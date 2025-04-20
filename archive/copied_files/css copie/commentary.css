@@ -1,0 +1,71 @@
+/* =============================
+   1. Conteneur général
+   ============================= */
+   .commentary-box {
+    height: 100%;
+    display: flex;
+    flex-direction: column;   /* une ligne <p> sous l'autre */
+    gap: 1rem;                /* espace entre les commentaires */
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+/* =============================
+   2. Bloc de commentaire
+   ============================= */
+.generated-comment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1a1a1a;
+    color: #fff;
+    padding: 1rem;
+    border-radius: 4px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    opacity: 1;
+    animation: pulse 0.5s ease-out;
+}
+
+/* =============================
+   3. Animation “pulse”
+   ============================= */
+@keyframes pulse {
+    0%   { transform: scale(0.95); }
+    50%  { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* =============================
+   4. Succès/Échec de shoot seulement
+   ============================= */
+.generated-comment.shoot-success {
+    border-left: 4px solid #28a745;
+    background: linear-gradient(90deg, rgba(40,167,69,0.1), rgba(40,167,69,0.2));
+}
+
+.generated-comment.shoot-failure {
+    border-left: 4px solid #dc3545;
+    background: linear-gradient(90deg, rgba(220,53,69,0.1), rgba(220,53,69,0.2));
+}
+
+/* =============================
+   5. Style des noms de joueurs
+   ============================= */
+.player-name {
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+    font-weight: 700;
+    margin-right: 0.2rem;
+}
+
+.player-name.team-A {
+    background-color: #1e90ff;   /* bleu pour l’équipe A */
+    color: #fff;
+}
+
+.player-name.team-B {
+    background-color: #ff8c00;   /* orange pour l’équipe B */
+    color: #fff;
+}

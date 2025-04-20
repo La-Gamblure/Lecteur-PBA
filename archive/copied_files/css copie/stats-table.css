@@ -1,0 +1,87 @@
+/* === conteneur === */
+.stats-container {
+    height: 100%;
+    overflow: auto;
+    font-family: Arial, sans-serif;
+    padding: 10px 0;
+    background:#1e1e2d;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,.4);
+  }
+  
+  /* === table === */
+  #stats-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #fff;
+    font-size: 1rem;            /* un peu plus petit pour rentrer */
+  }
+  
+  /* bordure uniforme */
+  #stats-table th,
+  #stats-table td {
+    border: 1px solid #3a3a50;
+    padding: .6rem .75rem;
+    text-align: center;
+  }
+  
+  /* ligne d'en‑tête (Stats / Players / PTS …) */
+  .stats-row td {
+    background:#283e3a;
+    color:#64ffda;
+    font-weight:600;
+  }
+  
+  .team-logo-small {
+    width: 80px;          /* ajuste la taille à ton goût */
+    height: 80px;
+    object-fit: contain;  /* conserve les proportions */
+    display: block;
+    margin: 0 auto;       /* centre dans la cellule */
+  }
+  
+  /* Style spécifique pour la cellule du logo Tuah Hawks */
+  .team-label img[src*="tuah-hawks-logo"] {
+    background-color: white;
+    border-radius: 50%;
+    padding: 5px;
+  }
+  
+  /* Style pour le tag MVP */
+  .mvp-tag {
+    background:#ffd700;   /* or #ffce00 */
+    color:#000;
+    font-size:0.7rem;
+    font-weight:700;
+    padding:2px 4px;
+    border-radius:4px;
+    margin-left:6px;
+  }
+  
+  
+  /* noms des joueurs */
+  .player-name {
+    text-align:left;
+    padding-left:10px;
+    font-weight:700;
+  }
+  
+  /* === couleurs de fond === */
+  .team-a td { background:#6f6fd6; }   /* un violet doux */
+  .team-b td { background:#d65f5f; }   /* un rouge doux */
+  
+  /* colonne TOTAL → même couleur que le reste, mais gras */
+  #stats-table td:last-child { font-weight:700; }
+  
+  /* === effet hover optionnel === */
+  #stats-table tr:hover td {
+    filter: brightness(1.15);
+  }
+  
+  /* === scroll bar === */
+  .stats-container::-webkit-scrollbar { width:8px; }
+  .stats-container::-webkit-scrollbar-thumb {
+    background:#64ffda;
+    border-radius:4px;
+  }
+  

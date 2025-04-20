@@ -1,0 +1,81 @@
+{
+  "teams": [
+    {
+      "name": "Oko Rockets",
+      "logo": "oko-rockets-logo.png",
+      "players": [
+        "Arteka56", "Théguils", "JeanTaur", "Tonton", "Dilon Bricks"
+      ]
+    },
+    {
+      "name": "Can Heat Balls",
+      "logo": "can-heat-balls-logo.png",
+      "players": [
+        "backzylul", "Djetro", "wilfriedrp", "Teiqola", "Elodays"
+      ]
+    },
+    {
+      "name": "Gaus Spurs",
+      "logo": "gaus-spurs-logo.png",
+      "players": [
+        "ElBoully", "SangoRiley", "Pic", "Simoul", "Ellie"
+      ]
+    },
+    {
+      "name": "Sigma 68ers",
+      "logo": "sigma-68ers-logo.png",
+      "players": [
+        "Da Pounce", "JLGO", "Yahiko", "Manu Ginobili II", "Fab"
+      ]
+    },
+    {
+      "name": "Tuah Hawks",
+      "logo": "tuah-hawks-logo.png",
+      "players": [
+        "as2pike", "Sphynx787", "Fajitas33", "Crabou", "Tng10"
+      ]
+    },
+    {
+      "name": "Bear Hodlers",
+      "logo": "bear-hodlers-logo.png",
+      "players": [
+        "Rzh", "TankRomagnoli", "brice4307", "Bueno2So", "IamNickColt"
+      ]
+    },
+    {
+      "name": "Burnt Dinosaurs",
+      "logo": "burnt-dinosaurs-logo.png",
+      "players": [
+        "matgt", "Sparfou", "KingFire", "p0uet21", "Scredss"
+      ]
+    },
+    {
+      "name": "Ocean Demons",
+      "logo": "ocean-demons-logo.png",
+      "players": [
+        "BuzzerBeater", "PetiteJuju", "ShaadowStorme", "Locksyn", "Wayk00"
+      ]
+    },
+    {
+      "name": "Bos Storm Troopers",
+      "logo": "bos-storm-troopers-logo.png",
+      "players": [
+        "Seyars27", "Coconuts", "wazoolevrai", "Batigoal", "2b2a"
+      ]
+    },
+    {
+      "name": "FOMO Princes",
+      "logo": "fomo-princes-logo.png",
+      "players": [
+        "Schuriken", "Elgaborracho", "Luc813", "Sdely", "RogerPalaref"
+      ]
+    },
+    {
+      "name": "Mosquit Hornets",
+      "logo": "mosquit-hornets-logo.png",
+      "players": [
+        "MaximeS28", "lepil", "Michel pinto", "kaiser06", "Sorarecaillard"
+      ]
+    }
+  ]
+}

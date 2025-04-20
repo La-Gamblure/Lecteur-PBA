@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialGradient id="mysteryGlow" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+      <stop offset="0%" stop-color="#61dafb" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#1e1e1e" stop-opacity="0.3"/>
+    </radialGradient>
+    <filter id="mysteryGlowFilter">
+      <feGaussianBlur stdDeviation="15" result="blur"/>
+      <feFlood flood-color="#61dafb" flood-opacity="0.7" result="color"/>
+      <feComposite in="color" in2="blur" operator="in" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <linearGradient id="starsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#61dafb" stop-opacity="1"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Cercle lumineux de fond -->
+  <circle cx="256" cy="256" r="200" fill="url(#mysteryGlow)" opacity="0.8"/>
+  
+  <!-- Cercle d'énergie pulsant -->
+  <circle cx="256" cy="256" r="180" fill="none" stroke="#61dafb" stroke-width="3" stroke-dasharray="20,10" filter="url(#mysteryGlowFilter)"/>
+  
+  <!-- Silhouette du logo PBA (très stylisée et mystérieuse) -->
+  <path d="M256 120 L346 220 L306 320 L206 320 L166 220 Z" fill="none" stroke="url(#starsGrad)" stroke-width="10" filter="url(#mysteryGlowFilter)" opacity="0.7"/>
+  
+  <!-- Étoiles à l'intérieur -->
+  <circle cx="256" cy="200" r="5" fill="#ffffff" filter="url(#mysteryGlowFilter)"/>
+  <circle cx="226" cy="240" r="3" fill="#ffffff" filter="url(#mysteryGlowFilter)"/>
+  <circle cx="286" cy="240" r="3" fill="#ffffff" filter="url(#mysteryGlowFilter)"/>
+  <circle cx="246" cy="270" r="2" fill="#ffffff" filter="url(#mysteryGlowFilter)"/>
+  <circle cx="266" cy="270" r="2" fill="#ffffff" filter="url(#mysteryGlowFilter)"/>
+  
+  <!-- Anneau externe -->
+  <circle cx="256" cy="256" r="210" fill="none" stroke="#61dafb" stroke-width="1" stroke-dasharray="5,5" opacity="0.5"/>
+</svg>

@@ -1,0 +1,90 @@
+/* =============================
+   1. Conteneur général
+   ============================= */
+   .commentary-box {
+    height: 100%;
+    display: flex;
+    flex-direction: column;   /* une ligne <p> sous l'autre */
+    gap: 1rem;                /* espace entre les commentaires */
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+/* =============================
+   2. Bloc de commentaire
+   ============================= */
+.generated-comment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1a1a1a;
+    color: #fff;
+    padding: 1rem;
+    border-radius: 4px;
+    font-size: 1.9rem;
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    opacity: 1;
+}
+.generated-comment.shoot-success {
+    border-left: 4px solid #00ff00;  /* Vert pur plus brillant */
+    background: linear-gradient(90deg, rgba(0,255,0,0.15), rgba(0,255,0,0.25));
+    animation: successGlow 0.3s ease-in-out infinite alternate;
+}
+
+.generated-comment.shoot-failure {
+    border-left: 4px solid #ff0000;  /* Rouge pur plus vif */
+    background: linear-gradient(90deg, rgba(255,0,0,0.15), rgba(255,0,0,0.25));
+    animation: failureGlow 0.3s ease-in-out infinite alternate;
+}
+
+/* Animation rapide pour un effet de flash */
+@keyframes successGlow {
+    0% {
+        box-shadow: 0 0 2px rgba(0,255,0,0.2);
+        border-left-width: 4px;
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(0,255,0,0.8);
+        border-left-width: 6px;
+    }
+    100% {
+        box-shadow: 0 0 5px rgba(0,255,0,0.3);
+        border-left-width: 4px;
+    }
+}
+
+@keyframes failureGlow {
+    0% {
+        box-shadow: 0 0 2px rgba(255,0,0,0.2);
+        border-left-width: 4px;
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255,0,0,0.8);
+        border-left-width: 6px;
+    }
+    100% {
+        box-shadow: 0 0 5px rgba(255,0,0,0.3);
+        border-left-width: 4px;
+    }
+}
+
+/* =============================
+   5. Style des noms de joueurs
+   ============================= */
+.player-name {
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+    font-weight: 700;
+    margin-right: 0.2rem;
+}
+
+.player-name.team-A {
+    background-color: #706FD6;   /* bleu pour l’équipe A */
+    color: #fff;
+}
+
+.player-name.team-B {
+    background-color: #D65F5F;   /* orange pour l’équipe B */
+    color: #fff;
+}
