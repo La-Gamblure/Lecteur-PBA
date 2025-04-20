@@ -346,8 +346,8 @@ function updatePossession(row) {
     let possession = '';
     
     // Déterminer la possession selon l'équipe et la situation
-    const situation = row['commentaire-Situation'] || "";
-    if (situation === 'Possession' || situation.toLowerCase() === "shoot") {
+    const situation = row['commentaire-Situation'];
+    if (situation === 'Possession' || (situation && situation.toLowerCase() === "shoot")) {
         possession = row['commentaire-Equipe'];
     }
     

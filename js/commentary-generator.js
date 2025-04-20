@@ -6,7 +6,14 @@
  *   - generateComments(timeline) → Array<{...evt, generatedComment}>
  *   - renderComments(timeline, containerSelector) → injecte dans le DOM + console.log
  */
-
+/**
+ * Vérifie si une valeur est considérée comme vide (null, undefined ou chaîne vide)
+ * @param {*} value - Valeur à vérifier
+ * @returns {boolean}
+ */
+function isEmptyValue(value) {
+  return value === null || value === undefined || value === "";
+}
 /**
  * Enrobe le nom du joueur dans un <span> avec classe selon l'équipe
  * @param {string} name
@@ -131,9 +138,9 @@ const COMMENT_TEMPLATES = {
     'Succès': [
       "C'est réussi pour {player} !  <span class=\"points\">+{pts}PT</span>  pour les {team} !",
       '{player} marque à  <span class=\"points\">{pts}PT</span>  et fait briller les {team} !',
-      'Panier de {player} !  <span class=\"points\">{pts}PT</span>  pour les {team}',
+      'Panier de {player} !  <span class=\"points\">+{pts}PT</span>  pour les {team}',
       '{player} fait mouche !  <span class=\"points\">+{pts}PT</span>  pour les {team}',
-      'Score de {player} à  <span class=\"points\">{pts}PT</span> , les {team} marquent !'
+      'Superbe shoot de {player} et  <span class=\"points\">+{pts}PT</span>  pour les {team} !'
     ],
     'Echec': [
       "C'est raté pour {player}",
@@ -177,13 +184,24 @@ function buildComment(evt, nextEvt) {
   const result = evt['commentaire-Succes'];
   const templates = COMMENT_TEMPLATES[situation];
   if (!templates) return '';
-  const list = (result && templates[result]) || templates.default;
+  
+  // Utiliser la fonction utilitaire au lieu de la condition simple
+  const list = (!isEmptyValue(result) && templates[result]) || templates.default;
   if (!list) return '';
   let tpl = pick(list);
+  
+  // Déterminer le bon nombre de points en regardant aussi l'événement suivant
+  let points = detectShotType(evt);
+  
+  // Vérifier si la situation est une Possession avec statut vide
+  if (situation === 'Possession' && isEmptyValue(result) && nextEvt['commentaire-Situation'] === 'Shoot') {
+    points = detectShotType(nextEvt);
+  }
+  
   return tpl
     .replace('{player}', evt['commentaire-Joueur'] || '')
     .replace('{nextPlayer}', nextEvt['commentaire-Joueur'] || '')
-    .replace('{pts}', detectShotType(evt))
+    .replace('{pts}', points)
     .replace('{team}', getTeamName(evt['commentaire-Equipe']));
 }
 
