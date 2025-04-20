@@ -3,8 +3,11 @@
  * Gère le chargement, le traitement et l'affichage des données JSON dans l'interface
  */
 
-// Utiliser le générateur de commentaires depuis la variable globale
-// Attend que window.CommentaryGenerator soit défini par le script module
+
+// Import du générateur de commentaires (mode module)
+
+
+
 
 // Variables globales pour le stockage des données et l'état du lecteur
 let jsonData = []; // Données du match
@@ -12,7 +15,6 @@ let currentRowIndex = 0; // Index de la ligne actuelle
 let isPlaying = false; // État de lecture (lecture/pause)
 let playbackTimer; // Timer pour l'avancement automatique
 let playbackSpeed = 1; // Vitesse de lecture (par défaut: x1)
-let previousStatsValues = {}; // Pour stocker les valeurs précédentes des statistiques
 
 // Constantes pour mapper les clés JSON avec les ID HTML
 const COLUMNS = {
@@ -20,8 +22,8 @@ const COLUMNS = {
     QUARTER: "scoreboard-QT",
     TIME: "scoreboard-Temps",
     ETAPE: "scoreboard-Etape",
-    SCORE_TEAM_A: "scoreboard-Score-cumule-Equipe-A",
-    SCORE_TEAM_B: "scoreboard-Score-cumule-Equipe-B",
+    SCORE_TEAM_A: "Score cumulé Equipe A",
+    SCORE_TEAM_B: "Score cumulé Equipe B",
     POSSESSION: "commentaire-Equipe", // Équipe qui a la possession
     
     // Propriétés pour les commentaires
@@ -39,6 +41,11 @@ const COLUMNS = {
  * Configure les contrôles de lecture (play, pause, reset, vitesse)
  */
 function setupPlaybackControls() {
+    // Affiche le placeholder au chargement
+    const commentsBox = document.getElementById('comments');
+    if (commentsBox) {
+        commentsBox.innerHTML = '<p id="placeholder-comment" class="generated-comment">Le match va bientôt commencer</p>';
+    }
     try {
         const playButton = document.getElementById('play-button');
         const pauseButton = document.getElementById('pause-button');
@@ -157,11 +164,14 @@ function handleFileUpload(event) {
                     jsonData = rawJsonData;
                     
                     try {
-                        if (window.CommentaryGenerator && typeof window.CommentaryGenerator.enrichPlays === 'function') {
-                            jsonData = window.CommentaryGenerator.enrichPlays(rawJsonData);
+                        // Enrichissement des actions (si enrichPlays existe)
+                        if (typeof wrapPlayers === 'function') {
+                            jsonData = wrapPlayers(rawJsonData);
                         }
+                        // Génération des commentaires enrichis
+                        jsonData = generateComments(jsonData);
                     } catch (enrichError) {
-                        console.warn('Enrichissement des données non disponible:', enrichError.message);
+                        console.warn('Enrichissement ou génération de commentaires non disponible:', enrichError.message);
                     }
                     
                     // Stocker les données dans window pour compatibilité avec d'autres modules
@@ -206,37 +216,75 @@ function handleFileUpload(event) {
  * Met à jour l'affichage avec les données de la ligne actuelle
  * @param {number} rowIndex - Index de la ligne dans jsonData
  */
+// --- Dans updateDisplay(rowIndex) ---
 function updateDisplay(rowIndex) {
     try {
-        // Vérifier si l'index est valide
-        if (rowIndex < 0 || rowIndex >= jsonData.length) {
-            throw new Error(`Index de ligne invalide: ${rowIndex} (max: ${jsonData.length - 1})`);
-        }
-        
-        // Récupérer la ligne correspondante
-        const row = jsonData[rowIndex];
-        
-        // Mettre à jour le compteur d'étapes
-        document.getElementById('current-step').textContent = rowIndex + 1;
-        
-        // Mettre à jour le scoreboard
-        updateScoreboard(row);
-        
-        // Mettre à jour l'indicateur de possession
-        updatePossession(row);
-        
-        // COMMENTÉ : Désactivation temporaire des commentaires
-        // updateCommentary(row);
-        
-        // Mettre à jour les statistiques des joueurs
-        updatePlayerStats(row);
-        
-        // Marquer le MVP (on garde cette fonction comme demandé)
-        computeAndMarkMVP();
-    } catch (error) {
-        console.error('Erreur lors de la mise à jour de l\'affichage:', error.message);
+      if (rowIndex < 0 || rowIndex >= jsonData.length) {
+        throw new Error(`Index invalide: ${rowIndex}`);
+      }
+      const row     = jsonData[rowIndex];
+      const nextRow = jsonData[rowIndex + 1] || {};
+  
+      // Mise à jour des compteurs, scoreboard, etc.
+      document.getElementById('current-step').textContent = rowIndex + 1;
+      updateScoreboard(row);
+      updatePossession(row);
+  
+      // Passe nextRow à updateCommentary
+      updateCommentary(row, nextRow);
+  
+      updatePlayerStats(row);
+      computeAndMarkMVP();
+    } catch (err) {
+      console.error('updateDisplay error:', err);
     }
-}
+  }
+  
+  /**
+   * Met à jour les commentaires avec les données de la ligne
+   * @param {Object} row     - Ligne actuelle
+   * @param {Object} nextRow - Ligne suivante (peut être vide)
+   */
+  function updateCommentary(row, nextRow) {
+    const commentsBox = document.getElementById('comments');
+    if (!commentsBox) return;
+    commentsBox.innerHTML = '';
+  
+    if (!row.generatedComment) return;
+  
+    const p = document.createElement('p');
+    p.className = 'generated-comment';
+  
+    // Appliquer style Succès/Échec si Shoot
+    if (row['commentaire-Situation'] === 'Shoot') {
+      const res = row['commentaire-Succes'];
+      if (res === 'Succès')      p.classList.add('shoot-success');
+      else if (res === 'Echec' || res === 'Blocked') p.classList.add('shoot-failure');
+    }
+  
+    // Construire le HTML avec spans pour les joueurs
+    let html = row.generatedComment;
+  
+    // Joueur courant
+    const player = row['commentaire-Joueur'] || '';
+    const team   = row['commentaire-Equipe'] || '';
+    if (player) {
+      const reP = new RegExp(`\\b${player}\\b`, 'g');
+      html = html.replace(reP, wrapPlayer(player, team));
+    }
+  
+    // Joueur suivant
+    const np    = nextRow['commentaire-Joueur'] || '';
+    const nTeam = nextRow['commentaire-Equipe']   || '';
+    if (np) {
+      const reN = new RegExp(`\\b${np}\\b`, 'g');
+      html = html.replace(reN, wrapPlayer(np, nTeam));
+    }
+  
+    p.innerHTML = html;
+    commentsBox.appendChild(p);
+  }
+  
 
 /**
  * Met à jour le scoreboard avec les données de la ligne
@@ -247,9 +295,31 @@ function updateScoreboard(row) {
     const quarter = row[COLUMNS.QUARTER] || "Q1";
     document.getElementById('quarter').textContent = quarter;
     
-    // Mettre à jour le temps
-    const time = row[COLUMNS.TIME] || "12:00";
-    document.getElementById('timer').textContent = time;
+   
+
+    // Mettre à jour le temps avec transformation du format
+    let time = row[COLUMNS.TIME] || "12:00";
+
+    // Transformer le format mm'ss'' en mm:ss
+time = time.replace(/(\d+)'(\d+)''/, '$1:$2');
+
+// Dans certains cas, le format peut être uniquement mm' ou mm'ss'
+time = time.replace(/(\d+)'(\d*)$/, function(match, minutes, seconds) {
+    // Si les secondes ne sont pas spécifiées, mettre 00
+    return `${minutes}:${seconds || '00'}`;
+});
+
+// S'assurer que les secondes ont toujours 2 chiffres
+const parts = time.split(':');
+if (parts.length === 2) {
+    const minutes = parts[0];
+    const seconds = parts[1].padStart(2, '0'); // Ajouter un 0 si nécessaire
+    time = `${minutes}:${seconds}`;
+}
+
+document.getElementById('timer').textContent = time;
+
+
     
     // Mettre à jour le score de l'équipe A
     const scoreA = row[COLUMNS.SCORE_TEAM_A] || 0;
@@ -272,11 +342,13 @@ function updateScoreboard(row) {
  * @param {Object} row - Données de la ligne
  */
 function updatePossession(row) {
+    const teamCode = row['commentaire-Equipe'];
     let possession = '';
     
     // Déterminer la possession selon l'équipe et la situation
-    if (row.Situation && (row.Situation.toLowerCase() === "possession" || row.Situation.toLowerCase() === "shoot")) {
-        possession = row.Equipe;
+    const situation = row['commentaire-Situation'] || "";
+    if (situation === 'Possession' || situation.toLowerCase() === "shoot") {
+        possession = row['commentaire-Equipe'];
     }
     
     // Log pour débogage - simplifié
@@ -332,21 +404,6 @@ function updatePossessionIndicator(possession) {
         teamBBox.classList.add('has-possession');
         if (teamBBall) teamBBall.style.display = 'block';
         if (possessionB) possessionB.style.display = 'block';
-    }
-}
-
-/**
- * Met à jour les commentaires avec les données de la ligne
- * @param {Object} row - Données de la ligne
- */
-function updateCommentary(row) {
-    // COMMENTÉ : Désactivation temporaire de la génération de commentaires
-    
-    // Commentaire de base simple pour le débogage
-    const commentaryElement = document.getElementById('commentary-text');
-    if (commentaryElement) {
-        // Afficher simplement l'étape actuelle pour le débogage
-        commentaryElement.textContent = `Étape: ${row['scoreboard-Etape']} | Action: ${row['commentaire-Situation'] || 'N/A'}`;
     }
 }
 
@@ -435,7 +492,13 @@ function updateTeamStats(row, team) {
             // Mettre à jour la cellule avec la valeur du JSON si elle existe
             if (row[idStat] !== undefined) {
                 // Récupérer la valeur actuelle (convertir en nombre pour la comparaison)
-                const currentValue = parseInt(row[idStat]) || 0;
+                let currentValue = parseFloat(row[idStat]);
+if (!isNaN(currentValue)) {
+    // Affiche 1 décimale si ce n'est pas un entier
+    currentValue = Number.isInteger(currentValue) ? currentValue : currentValue.toFixed(1);
+} else {
+    currentValue = 0;
+}
                 
                 // Récupérer la valeur précédente si elle existe
                 const previousValue = previousStatsValues[idStat] || 0;
@@ -548,6 +611,19 @@ function computeAndMarkMVP() {
  * Démarre la lecture automatique du match
  */
 function startPlayback() {
+    // Affiche le commentaire de coup d'envoi, puis commence la lecture normale
+    const commentsBox = document.getElementById('comments');
+    if (commentsBox) {
+        commentsBox.innerHTML = '<p class="generated-comment">Coup d\'envoi du match !</p>';
+    }
+    setTimeout(() => {
+        // Ensuite, commence la lecture normale
+        _startPlaybackReal();
+    }, 1200); // Affiche le message 1.2s avant de commencer la timeline
+}
+
+// Déplace l'ancienne logique de startPlayback ici
+function _startPlaybackReal() {
     try {
         if (jsonData.length === 0) {
             throw new Error('Aucune donnée JSON disponible. Veuillez charger un fichier JSON valide.');
@@ -641,7 +717,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 window.JsonProcessor = {
     handleFileUpload,
-    handleExcelUpload,
     startPlayback,
     pausePlayback,
     resetPlayback,

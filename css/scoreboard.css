@@ -80,47 +80,6 @@
     transition: opacity 0.3s ease;
 }
 
-.team-a .ball-container {
-    right: -20px;
-}
-
-.team-b .ball-container {
-    left: -20px;
-}
-
-.basketball {
-    width: 100%;
-    height: 100%;
-    opacity: 0; /* Par défaut, les ballons sont invisibles */
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.basketball.active {
-    opacity: 1;
-    transform: scale(1.1);
-}
-
-/* Styles pour l'indicateur de possession avec emoji */
-.possession-indicator {
-    display: none;          /* caché par défaut */
-    font-size: 2rem;
-    position: absolute;
-    top: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    filter: drop-shadow(0 0 4px #ffb300);
-    z-index: 20;
-}
-
-.team.has-possession .possession-indicator {
-    display: block;  /* visible quand la classe est là */
-    animation: bounce .6s infinite alternate;
-}
-
-@keyframes bounce { 
-    from { transform: translateY(-2px); } 
-    to { transform: translateY(2px); } 
-}
 
 /* Styles pour les noms d'équipes supprimés - les logos suffisent */
 
@@ -227,10 +186,6 @@ transform: scale(1.1);
     align-items: center;
 }
 
-.team.has-possession {
-    background-color: rgba(255, 215, 0, 0.15);
-}
-
 /* Animation pour la mise en évidence des statistiques incrémentées */
 @keyframes stat-highlight {
     0% { background-color: rgba(76, 175, 80, 0.1); }
@@ -242,30 +197,4 @@ transform: scale(1.1);
     animation: stat-highlight 1s ease-in-out;
     font-weight: bold;
     color: #006400;
-}
-
-#playback-speed {
-    background-color: #333;
-    color: white;
-    border: none;
-    border-radius: 15px;
-    padding: 5px 10px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-#playback-speed:hover:not(:disabled) {
-    background-color: #3a3a50;
-}
-
-#playback-speed:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-/* Manga effect placeholder */
-.manga-effect {
-    height: 20px;
-    margin-top: 10px;
 }

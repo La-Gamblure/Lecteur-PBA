@@ -1,257 +1,213 @@
-/* -----------------------------------------------------------------------
- *  commentary‑generator.js
- *  =======================
- *  •  Parse la timeline JSON du PBA
- *  •  Devine RBD / AST / TO / BLK quand ils n’existent pas
- *  •  Génère une phrase de commentaire riche en emoji
- *  -------------------------------------------------------------------- */
-
-/* ---------- 1.  Dictionnaires (labels, emoji, templates) -------------- */
-
-export const RESULT_LABEL = {
-  made   : 'réussi',
-  success: 'réussi',
-  miss   : 'raté',
-  fail   : 'raté',
-  failure: 'raté',
-  block  : 'contré'
-};
-
-export const ACTION_EMOJI = {
-  '2PT' : '💥',
-  '3PT' : '🎯',
-  'RBD' : '✋',
-  'AST' : '👋',
-  'BLK' : '🛑',
-  'STL' : '🦅',
-  'TO'  : '❌',
-  'DD'  : '👏',
-  'TD'  : '💪',
-  'POS' : '🏀'
-};
-
-export const COMMENT_TEMPLATES = {
-  '2PT': {
-    success: [
-      '{emoji} {player} transperce le filet à 2 pts !',
-      '{emoji} Joli jumper de {player} pour 2 points.',
-      '{emoji} {player} dégaine à mi‑distance : c’est dedans !'
-    ],
-    fail: [
-      '{emoji} {player} manque son jumper à 2 pts.',
-      'Tentative de {player} qui ne trouve pas le fond du panier.'
-    ],
-    block: [
-      '{emoji} {player} se fait contrer !',
-      '{emoji} Contre monstrueux sur {player} !'
-    ]
-  },
-  '3PT': {
-    success: [
-      '{emoji} BANG ! {player} au‑delà de l’arc !',
-      '{emoji} Quel shoot à 3 pts de {player} !'
-    ],
-    fail: [
-      '{emoji} {player} trop court derrière l’arc.',
-      '{player} de loin, mais ça ne rentre pas.'
-    ],
-    block: [
-      '{emoji} {player} contré à 3 pts !',
-      '{emoji} Le tir longue distance de {player} est rejeté !'
-    ]
-  },
-  'RBD': {
-    neutral: [
-      '{emoji} Rebond capté par {player} !',
-      '{player} s’impose au rebond.'
-    ]
-  },
-  'AST': {
-    neutral: [
-      '{emoji} Caviar servi par {player}.',
-      '{player} distribue à merveille !'
-    ]
-  },
-  'BLK': {
-    neutral: [
-      '{emoji} Contre de {player} !',
-      '{player} dit « non, non, non ! »'
-    ]
-  },
-  'STL': {
-    neutral: [
-      '{emoji} Interception de {player} !',
-      '{player} vole la balle !'
-    ]
-  },
-  'TO': {
-    neutral: [
-      '{emoji} {player} perd la balle.',
-      '{player} se fait chiper la gonfle.'
-    ]
-  },
-  'POS': {
-    neutral: [
-      '{emoji} {team} remonte la balle.',
-      '{team} à la manœuvre.'
-    ]
-  }
-};
-
-/* ---------------------- 2.  Utilitaires ------------------------------- */
-
-const pick = arr => arr[Math.floor(Math.random() * arr.length)];
-
-/** Devine s’il s’agit d’un tir à 2 ou 3 points. */
-function detectShotType(play) {
-  // 1) colonne "3‑Points" (format A4-3-Points, B1 3 Points, etc.)
-  const threeKey = Object.keys(play).find(k =>
-    k.toLowerCase().includes('3') && k.toLowerCase().includes('points') && +play[k] > 0
-  );
-  if (threeKey) return '3PT';
-
-  // 2) Points == 3
-  const ptsKey = Object.keys(play).find(k =>
-    k.toLowerCase().endsWith('points') && +play[k] === 3
-  );
-  return ptsKey ? '3PT' : '2PT';
-}
-
-/* ----------------- 3.  Enrichissement de la timeline ------------------ */
+/* commentary-generator.js
+ * Générateur de commentaires aléatoires pour match de basket
+ * 
+ * Fonctions globales :
+ *   - wrapPlayer(name, teamCode) → string HTML
+ *   - generateComments(timeline) → Array<{...evt, generatedComment}>
+ *   - renderComments(timeline, containerSelector) → injecte dans le DOM + console.log
+ */
 
 /**
- * Ajoute actionType / actionResult aux lignes brutes + déduit RBD/AST/TO/BLK
- * @param {Array<Object>} rawPlays  Tableau JSON issu du fichier PBA
- * @returns {Array<Object>}         Tableau enrichi
+ * Enrobe le nom du joueur dans un <span> avec classe selon l'équipe
+ * @param {string} name
+ * @param {string} teamCode 'A' ou 'B'
+ * @returns {string}
  */
-export function enrichPlays(rawPlays) {
-  const plays = rawPlays.map(p => ({ ...p, actionType: null, actionResult: null }));
+function wrapPlayer(name, teamCode) {
+  if (!name) return '';
+  return `<span class="player-name team-${teamCode}">${name}</span>`;
+}
 
-  for (let i = 0; i < plays.length; i++) {
-    const cur  = plays[i];
-    const prev = plays[i - 1] || {};
-    const next = plays[i + 1] || {};
+/**
+ * Pour chaque événement de timeline, génère un commentaire
+ * et l'ajoute dans la propriété `generatedComment`.
+ * @param {Array<Object>} timeline
+ * @returns {Array<Object>}
+ */
+function generateComments(timeline) {
+  return timeline.map((evt, idx) => {
+    const nextEvt = timeline[idx + 1] || {};
+    const text = buildComment(evt, nextEvt);
+    return { ...evt, generatedComment: text };
+  });
+}
 
-    const sit = (cur['commentaire-Situation'] || '').trim();
-    const res = (cur['commentaire-Succes']    || '').trim().toLowerCase();
+/**
+ * Injecte en console et dans le DOM sous forme de <p> les commentaires générés
+ * @param {Array<Object>} timeline
+ * @param {string} containerSelector
+ */
+function renderComments(timeline, containerSelector = '#comments') {
+  const plays = generateComments(timeline);
+  const container = document.querySelector(containerSelector);
+  if (!container) {
+    console.warn(`Container "${containerSelector}" introuvable.`);
+    return;
+  }
+  container.innerHTML = '';
 
-    /* --- Mapping direct ------------------------------------------------ */
-    if (sit === 'Possession') {
-      cur.actionType = 'POS';
-      cur.actionResult = 'neutral';
-    } else if (sit === 'Steal') {
-      cur.actionType = 'STL';
-      cur.actionResult = 'neutral';
-    } else if (sit === 'Shoot') {
-      cur.actionType = detectShotType(cur);
-      cur.actionResult = res === 'succès' ? 'success'
-                        : res === 'blocked' ? 'block'
-                        : 'fail';
-    }
+  plays.forEach((evt, idx) => {
+    const text = evt.generatedComment;
+    if (!text) return;
+    console.log(text);
+    const p = document.createElement('p');
+    p.className = 'generated-comment';
 
-    /* --- R1 : Rebond --------------------------------------------------- */
-    if (sit === 'Rebond Global' &&
-        next?.['commentaire-Situation'] === 'Possession') {
-      next.actionType   = 'RBD';
-      next.actionResult = 'neutral';
-    }
-
-    /* --- R2 : Assist --------------------------------------------------- */
-    if (sit === 'Shoot' && res === 'succès' &&
-        prev?.['commentaire-Situation'] === 'Possession' &&
-        prev['commentaire-Equipe'] === cur['commentaire-Equipe'] &&
-        prev['commentaire-Joueur'] !== cur['commentaire-Joueur']) {
-      prev.actionType   = 'AST';
-      prev.actionResult = 'neutral';
-    }
-
-    /* --- R3 : Turnover ------------------------------------------------- */
-    if (sit === 'Possession' &&
-        prev?.['commentaire-Situation'] === 'Possession' &&
-        prev['commentaire-Equipe'] !== cur['commentaire-Equipe']) {
-      prev.actionType   = 'TO';
-      prev.actionResult = 'neutral';
-    }
-
-    /* --- R4 & R5 : Shoot bloqué / ligne "Block" parasite -------------- */
-    if (sit === 'Shoot' && res === 'blocked') {
-      // Tir bloqué => raté + BLK à premier joueur adverse après le tir
-      cur.actionResult = 'block';
-      const blocker = plays.slice(i + 1).find(p =>
-        p['commentaire-Equipe'] &&
-        p['commentaire-Equipe'] !== cur['commentaire-Equipe']
+    // Enrobe les noms de joueurs
+    let html = text;
+    const playerName = evt['commentaire-Joueur'] || '';
+    if (playerName) {
+      html = html.replace(
+        new RegExp(`\\b${escapeRegExp(playerName)}\\b`, 'g'),
+        wrapPlayer(playerName, evt['commentaire-Equipe'])
       );
-      if (blocker) {
-        blocker.actionType   = 'BLK';
-        blocker.actionResult = 'neutral';
-      }
     }
-    if (sit === 'Block' &&
-        prev?.['commentaire-Situation'] === 'Shoot' &&
-        prev['commentaire-Joueur'] === cur['commentaire-Joueur']) {
-      // On ignore cette ligne : déjà traitée ci‑dessus
-      cur.actionType = null;
-      cur.actionResult = null;
+    const nextName = (plays[idx + 1] || {})['commentaire-Joueur'] || '';
+    const nextTeam = (plays[idx + 1] || {})['commentaire-Equipe'] || '';
+    if (nextName) {
+      html = html.replace(
+        new RegExp(`\\b${escapeRegExp(nextName)}\\b`, 'g'),
+        wrapPlayer(nextName, nextTeam)
+      );
     }
+    p.innerHTML = html;
+
+    // Appliquer style succès/échec uniquement sur Shoot
+    if (evt['commentaire-Situation'] === 'Shoot') {
+      const res = evt['commentaire-Succes'];
+      if (res === 'Succès') p.classList.add('shoot-success');
+      else if (res === 'Echec' || res === 'Blocked') p.classList.add('shoot-failure');
+    }
+
+    container.appendChild(p);
+  });
+}
+
+// =============================
+// Templates et utilitaires
+// =============================
+const COMMENT_TEMPLATES = {
+  Possession: {
+    'Succès': [
+      '{player} fait la passe à {nextPlayer}',
+      '{player} trouve {nextPlayer} grâce à une belle passe',
+      'Passe réussie de {player} vers {nextPlayer}',
+      '{player} sert {nextPlayer} proprement',
+      '{player} distribue à {nextPlayer}'
+    ],
+    'Echec': [
+      '{player} fait une passe ratée...',
+      '{player} perd le ballon sur la passe',
+      'Passe manquée de {player}',
+      '{player} échoue dans sa passe',
+      'La passe de {player} ne trouve personne'
+    ],
+    default: [
+      'Shoot à {pts}PT de {player}...',
+      '{player} tente un shoot à {pts}PT...',
+      '{player} prend un tir à {pts}PT',
+      '{player} essaie à {pts}PT'
+    ]
+  },
+  'Rebond Global': {
+    default: [
+      'Rebond pour {nextPlayer}',
+      '{nextPlayer} capte le rebond',
+      '{nextPlayer} arrache le rebond',
+      'Le rebond va à {nextPlayer}',
+      '{nextPlayer} récupère le ballon'
+    ]
+  },
+  Steal: {
+    default: [
+      '{nextPlayer} intercepte la passe de {player}',
+      '{player} se fait voler la balle par {nextPlayer}',
+      '{nextPlayer} subtilise le ballon à {player}',
+      'Interception de {nextPlayer} sur {player}',
+      '{nextPlayer} coupe la trajectoire et récupère'
+    ]
+  },
+  Shoot: {
+    'Succès': [
+      "C'est réussi pour {player} !  <span class=\"points\">+{pts}PT</span>  pour les {team} !",
+      '{player} marque à  <span class=\"points\">{pts}PT</span>  et fait briller les {team} !',
+      'Panier de {player} !  <span class=\"points\">{pts}PT</span>  pour les {team}',
+      '{player} fait mouche !  <span class=\"points\">+{pts}PT</span>  pour les {team}',
+      'Score de {player} à  <span class=\"points\">{pts}PT</span> , les {team} marquent !'
+    ],
+    'Echec': [
+      "C'est raté pour {player}",
+      '{player} manque son tir à {pts}PT',
+      'Tir manqué de {player}',
+      '{player} loupe son shoot à {pts}PT',
+      'Le ballon sort du cercle, échec de {player}'
+    ],
+    Blocked: [
+      '{player} se fait  <span class="block">contrer !</span>',
+      '<span class="block">Contre</span>  sur le tir de {player} à {pts}PT',
+      'Tir de {player}  <span class="block"> bloqué net !</span>',
+      'Le shoot de {player} est  <span class="block">stoppé</span>'
+     
+    ]
+  },
+  Block: {
+    default: [
+      '{nextPlayer} bloque le shoot de {player}',
+      '{player} se fait stopper par {nextPlayer}',
+      'Contre de {nextPlayer} sur {player}',
+      '{nextPlayer} rejette le tir de {player}',
+      'Magnifique block de {nextPlayer} face à {player}'
+    ]
   }
-  return plays;
-}
-
-/* ---------------------- 4.  Générateur final -------------------------- */
-
-/**
- * Retourne une phrase de commentaire prête à l’affichage
- * @param {Object} play  Ligne enrichie (doit contenir actionType / actionResult)
- * @returns {string}     Commentaire ou chaîne vide
- */
-export function generateCommentary(play) {
-  const { actionType, actionResult = 'neutral' } = play;
-  if (!actionType) return '';
-
-  const tplGroup = COMMENT_TEMPLATES[actionType];
-  if (!tplGroup) return '';
-
-  // result key : success | fail | block | neutral
-  const templates = tplGroup[actionResult] || tplGroup.neutral;
-  if (!templates || !templates.length) return '';
-
-  const emoji = ACTION_EMOJI[actionType] || '';
-  const player = play['commentaire-Joueur'] || '';
-  const team   = play['commentaire-Equipe'] || '';
-
-  let sentence = pick(templates);
-  sentence = sentence
-    .replace('{emoji}', emoji)
-    .replace('{player}', player)
-    .replace('{team}', team);
-
-  return sentence;
-}
-
-/* ---------------------- 5.  Exports « namespace » --------------------- */
-
-export const CommentaryGenerator = {
-  enrichPlays,
-  generateCommentary,
-  pick,
-  RESULT_LABEL,
-  ACTION_EMOJI,
-  COMMENT_TEMPLATES
 };
 
-/* ---------------------- 6.  Exemple d’utilisation ---------------------
-
-import data from './Data-PBA.json'  assert { type: 'json' };
-import { CommentaryGenerator as CG } from './commentary-generator.js';
-
-const plays = CG.enrichPlays(data);
-
-for (const p of plays) {
-  const c = CG.generateCommentary(p);
-  if (c) console.log(c);
+function pick(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
------------------------------------------------------------------------- */
+function buildComment(evt, nextEvt) {
+  // Gestion spéciale pour le coup d'envoi et la fin de match
+  if (evt['scoreboard-Etape'] === 0) {
+    return "Coup d'envoi du match !";
+  }
+  if (evt['scoreboard-Etape'] === 701) {
+    return "Fin du match ! Merci d'avoir suivi cette rencontre.";
+  }
+  const situation = evt['commentaire-Situation'];
+  const result = evt['commentaire-Succes'];
+  const templates = COMMENT_TEMPLATES[situation];
+  if (!templates) return '';
+  const list = (result && templates[result]) || templates.default;
+  if (!list) return '';
+  let tpl = pick(list);
+  return tpl
+    .replace('{player}', evt['commentaire-Joueur'] || '')
+    .replace('{nextPlayer}', nextEvt['commentaire-Joueur'] || '')
+    .replace('{pts}', detectShotType(evt))
+    .replace('{team}', getTeamName(evt['commentaire-Equipe']));
+}
 
-// Exposer le générateur comme variable globale pour compatibilité
-window.CommentaryGenerator = CommentaryGenerator;
+function detectShotType(evt) {
+  for (let key in evt) {
+    if (/3[- ]?Points$/i.test(key) && +evt[key] > 0) {
+      return 3;
+    }
+  }
+  return 2;
+}
+
+function getTeamName(code) {
+  return code === 'A' ? 'Gaus-Spurs' : 'Bear Hodlers';
+}
+
+/**
+ * Échappe les caractères spéciaux pour RegExp
+ */
+function escapeRegExp(str) {
+  return str.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&');
+}
+
+// Expose en global
+window.wrapPlayer = wrapPlayer;
+window.generateComments = generateComments;
+window.renderComments = renderComments;

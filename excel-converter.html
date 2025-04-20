@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PBA Excel → JSON Converter</title>
-    <link rel="stylesheet" href="css/file-upload.css">
+    <!-- <link rel="stylesheet" href="css/file-upload.css"> --> <!-- Fichier absent -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -195,13 +196,7 @@
             justify-content: center;
         }
         
-        .mystery-icon {
-            width: 150px;
-            height: 150px;
-            filter: drop-shadow(0 0 15px rgba(97, 218, 251, 0.7));
-            animation: float 3s ease-in-out infinite, pulse-light 2s ease-in-out infinite;
-        }
-        
+             
         .mystery-text {
             color: #61dafb;
             font-size: 1.2rem;
@@ -251,72 +246,18 @@
             animation: pulse 1.5s infinite;
         }
         
-        /* Animation de pulsation */
-        @keyframes pulse {
-            0% {
-                filter: drop-shadow(0 0 25px rgba(97, 218, 251, 1)) brightness(1.2);
-            }
-            50% {
-                filter: drop-shadow(0 0 35px rgba(97, 218, 251, 1)) brightness(1.3);
-            }
-            100% {
-                filter: drop-shadow(0 0 25px rgba(97, 218, 251, 1)) brightness(1.2);
-            }
-        }
+
     </style>
 </head>
 <body>
-    <!-- Overlay pour le fond sombre -->
-    <div id="overlay" onclick="hideLogoOverlay()"></div>
-    
-    <!-- Logo agrandi -->
-    <img id="bigLogo" src="logo-pba.svg" alt="Logo PBA agrandi" onclick="hideLogoOverlay()">
-    
     <div class="container">
-        <div class="logo-container">
-            <img src="logo-pba.svg" alt="Logo PBA" class="main-logo" id="pba-logo" onclick="showLogoOverlay()">
-            <div class="mystery-container" id="mystery-box" onclick="revealLogo()">
-                <img src="img/mystery-icon.svg" alt="Mystère" class="mystery-icon">
-                <div class="mystery-text">DÉCOUVRIR LE SECRET</div>
-            </div>
-        </div>
         
-        <script>
-            // Fonction pour révéler directement le logo agrandi
-            function revealLogo() {
-                // Faire disparaître l'élément mystère
-                const mysteryBox = document.getElementById('mystery-box');
-                mysteryBox.style.transform = 'translate(-50%, -50%) scale(0)';
-                mysteryBox.style.opacity = '0';
-                
-                // Afficher directement le logo agrandi
-                setTimeout(function() {
-                    // Activer le logo PBA normal (invisible mais prêt pour plus tard)
-                    document.getElementById('pba-logo').style.opacity = '1';
-                    
-                    // Afficher le logo agrandi
-                    showLogoOverlay();
-                }, 300);
-            }
-            
-            // Fonction pour afficher le logo agrandi
-            function showLogoOverlay() {
-                document.getElementById('overlay').style.display = 'block';
-                document.getElementById('bigLogo').style.display = 'block';
-                document.body.style.overflow = 'hidden'; // Empêcher le scroll
-            }
-            
-            // Fonction pour cacher le logo agrandi et réafficher le logo normal
-            function hideLogoOverlay() {
-                document.getElementById('overlay').style.display = 'none';
-                document.getElementById('bigLogo').style.display = 'none';
-                document.body.style.overflow = 'auto'; // Réactiver le scroll
-            }
-        </script>
+
+               
         <div class="navbar">
             <h1>PBA Excel → JSON Converter</h1>
             <div>
-                <a href="index.html">Retour au lecteur PBA</a>
+                <a href="/index.html">Retour au lecteur PBA</a>
             </div>
         </div>
         
@@ -360,7 +301,7 @@
     
     <!-- Charger les bibliothèques -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
-    <script src="pba_excel_processor.js"></script>
+    <script src="/pba_excel_processor.js"></script>
     
     <script>
         // Variables globales
