@@ -1,0 +1,197 @@
+/* === conteneur === */
+.stats-container {
+    height: 100%;
+    overflow: auto;
+    font-family: Arial, sans-serif;
+    padding: 10px 0;
+    background:#1e1e2d;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,.4);
+  }
+  
+  /* === table === */
+  #stats-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #fff;
+    font-size: 1rem;            /* un peu plus petit pour rentrer */
+  }
+  
+  /* bordure uniforme */
+  #stats-table th,
+  #stats-table td {
+    border: 1px solid #3a3a50;
+    padding: .6rem .75rem;
+    text-align: center;
+  }
+  
+  /* ligne d'en‑tête (Stats / Players / PTS …) */
+  .stats-row td {
+    background:#283e3a;
+    color:#64ffda;
+    font-weight:600;
+  }
+  
+  .team-logo-small {
+    width: 80px;          /* ajuste la taille à ton goût */
+    height: 80px;
+    object-fit: contain;  /* conserve les proportions */
+    display: block;
+    margin: 0 auto;       /* centre dans la cellule */
+  }
+  
+  /* Style spécifique pour la cellule du logo Tuah Hawks */
+  .team-label img[src*="tuah-hawks-logo"] {
+    background-color: white;
+    border-radius: 50%;
+    padding: 5px;
+  }
+  
+  /* Style pour le tag MVP */
+  .mvp-tag {
+    background:#ffd700;   /* or #ffce00 */
+    color:#000;
+    font-size:1rem;
+    font-weight:700;
+    padding:2px 4px;
+    border-radius:4px;
+    margin-left:6px;
+  }
+
+  .turnover {
+    /* Style par défaut pour 0 */
+    background-color: transparent;
+    color: inherit;
+    font-weight: normal;
+}
+
+.turnover.active {
+    /* Style quand différent de 0 */
+    background-color: rgba(50, 50, 50, 0.8);
+    color: #ff8a80;
+    font-weight: bold;
+    border: 1px solid rgba(255, 100, 100, 0.5);
+}
+
+.turnover.critical {
+    /* Style quand <= -9 */
+    background-color: #ff0000;
+    color: #ffffff;
+    font-weight: bold;
+    animation: criticalPulse 1.5s infinite;
+    border: 2px solid #ff6b6b;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+}
+
+.doubledouble {
+    /* Style par défaut pour 0 */
+    background-color: transparent;
+    color: inherit;
+    font-weight: normal;
+}
+
+.doubledouble.active {
+    /* Style quand différent de 0 */
+    background: linear-gradient(45deg, #4caf50, #8bc34a);
+    color: #ffffff;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    border: 2px solid #69f0ae;
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.7);
+    animation: ddGlow 2s infinite alternate;
+}
+
+.tripledouble {
+    /* Style par défaut pour 0 */
+    background-color: transparent;
+    color: inherit;
+    font-weight: normal;
+}
+
+.tripledouble.active {
+    /* Style quand différent de 0 */
+    background: linear-gradient(45deg, #ffd700, #ffeb3b);
+    color: #000000;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+    border: 2px solid #ffd740;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.9);
+    animation: tdGlow 1.5s infinite alternate;
+    position: relative;
+}
+
+.tripledouble.active::after {
+    content: '★';
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ff9800;
+    font-size: 1.2em;
+    animation: starSpin 4s linear infinite;
+}
+
+@keyframes criticalPulse {
+    0% {
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+    }
+    100% {
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    }
+}
+
+@keyframes ddGlow {
+    0% {
+        box-shadow: 0 0 15px rgba(76, 175, 80, 0.7);
+    }
+    100% {
+        box-shadow: 0 0 25px rgba(76, 175, 80, 0.9);
+    }
+}
+
+@keyframes tdGlow {
+    0% {
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.9);
+    }
+    100% {
+        box-shadow: 0 0 30px rgba(255, 215, 0, 1);
+    }
+}
+
+@keyframes starSpin {
+    0% {
+        transform: translateY(-50%) rotate(0deg);
+    }
+    100% {
+        transform: translateY(-50%) rotate(360deg);
+    }
+}
+  
+  /* noms des joueurs */
+  .player-name {
+    text-align:left;
+    padding-left:10px;
+    font-weight:700;
+  }
+  
+  /* === couleurs de fond === */
+  .team-a td { background:#6f6fd6; }   /* un violet doux */
+  .team-b td { background:#d65f5f; }   /* un rouge doux */
+  
+  /* colonne TOTAL → même couleur que le reste, mais gras */
+  #stats-table td:last-child { font-weight:700; }
+  
+  /* === effet hover optionnel === */
+  #stats-table tr:hover td {
+    filter: brightness(1.15);
+  }
+  
+  /* === scroll bar === */
+  .stats-container::-webkit-scrollbar { width:8px; }
+  .stats-container::-webkit-scrollbar-thumb {
+    background:#64ffda;
+    border-radius:4px;
+  }

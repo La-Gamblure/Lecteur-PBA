@@ -308,6 +308,7 @@ function initializeDisplay() {
     const statCells = document.querySelectorAll('.stats-table tr:not(.stats-row) td:not(.team-label):not(.player-name)');
     statCells.forEach(cell => {
         cell.textContent = '0';
+        cell.classList.remove('active'); // Force le style neutre sur TO/DD/TD
     });
 }
 

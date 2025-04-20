@@ -505,6 +505,21 @@ if (!isNaN(currentValue)) {
                 
                 // Mettre à jour le contenu
                 statElement.textContent = currentValue;
+                // CSS conditionnel pour TO, DD et TD
+                if (["TurnOvers", "DD", "TD"].includes(statType)) {
+                    if (parseFloat(currentValue) !== 0) {
+                        statElement.classList.add('active');
+                        // Ajout spécial pour les TurnOvers critiques (<= -9)
+                        if (statType === 'TurnOvers' && parseFloat(currentValue) <= -9) {
+                            statElement.classList.add('critical');
+                        } else {
+                            statElement.classList.remove('critical');
+                        }
+                    } else {
+                        statElement.classList.remove('active');
+                        statElement.classList.remove('critical');
+                    }
+                }
                 
                 // Si la valeur a augmenté, appliquer l'animation de mise en évidence
                 if (currentValue > previousValue) {
