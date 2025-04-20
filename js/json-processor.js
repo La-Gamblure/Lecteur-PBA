@@ -626,15 +626,28 @@ function computeAndMarkMVP() {
  * Démarre la lecture automatique du match
  */
 function startPlayback() {
-    // Affiche le commentaire de coup d'envoi, puis commence la lecture normale
     const commentsBox = document.getElementById('comments');
-    if (commentsBox) {
-        commentsBox.innerHTML = '<p class="generated-comment">Coup d\'envoi du match !</p>';
+    
+    // Vérifier si on est au début du match (index 0) ou en cours de match
+    if (currentRowIndex === 0) {
+        // Début du match - afficher le coup d'envoi
+        if (commentsBox) {
+            commentsBox.innerHTML = '<p class="generated-comment">Coup d\'envoi du match !</p>';
+        }
+        setTimeout(() => {
+            _startPlaybackReal();
+        }, 1200); // Affiche le message 1.2s avant de commencer la timeline
+    } else {
+        // Reprise du match - afficher un message de reprise
+        if (commentsBox) {
+            const quarter = jsonData[currentRowIndex][COLUMNS.QUARTER] || 'Q1';
+            const time = jsonData[currentRowIndex][COLUMNS.TIME] || '12:00';
+            commentsBox.innerHTML = `<p class="generated-comment">Reprise du match !</p>`;
+        }
+        setTimeout(() => {
+            _startPlaybackReal();
+        }, 800); // Délai plus court pour la reprise
     }
-    setTimeout(() => {
-        // Ensuite, commence la lecture normale
-        _startPlaybackReal();
-    }, 1200); // Affiche le message 1.2s avant de commencer la timeline
 }
 
 // Déplace l'ancienne logique de startPlayback ici
