@@ -177,6 +177,8 @@ function handleFileUpload(event) {
                     // Stocker les données dans window pour compatibilité avec d'autres modules
                     window.jsonData = jsonData;
                     
+                    // Le placeholder affiche déjà "Début du match !" par défaut
+                    
                     // Mettre à jour les compteurs
                     document.getElementById('current-step').textContent = '1';
                     document.getElementById('total-steps').textContent = jsonData.length;
@@ -193,9 +195,9 @@ function handleFileUpload(event) {
                     // Notification à l'utilisateur
                     alert(`Données chargées avec succès! ${jsonData.length} étapes disponibles.`);
                     
-                } catch (error) {
-                    throw new Error('Erreur lors du parsing JSON: ' + error.message);
-                }
+                     } catch (error) {
+                         throw new Error('Erreur lors du parsing JSON: ' + error.message);
+                     }
             };
             
             // Définir la fonction d'erreur
@@ -630,13 +632,10 @@ function startPlayback() {
     
     // Vérifier si on est au début du match (index 0) ou en cours de match
     if (currentRowIndex === 0) {
-        // Début du match - afficher le coup d'envoi
-        if (commentsBox) {
-            commentsBox.innerHTML = '<p class="generated-comment">Coup d\'envoi du match !</p>';
-        }
+        // Début du match - attendre 1,5 secondes exactement pour laisser le temps au message d'entre-deux d'être vu
         setTimeout(() => {
             _startPlaybackReal();
-        }, 1200); // Affiche le message 1.2s avant de commencer la timeline
+        }, 1500); // Attendre 1,5 secondes comme demandé par l'utilisateur
     } else {
         // Reprise du match - afficher un message de reprise
         if (commentsBox) {

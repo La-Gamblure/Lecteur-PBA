@@ -32,6 +32,11 @@
     font-weight:600;
   }
   
+  .darker {
+    color: #e0e0e0;
+    font-weight: 800;
+    filter: brightness(0.9);
+  }
   .team-logo-small {
     width: 80px;          /* ajuste la taille à ton goût */
     height: 80px;

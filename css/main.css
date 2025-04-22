@@ -81,7 +81,8 @@ body {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    height: 90vh; /* Remaining 90% of viewport height */
+    height: 100vh; /* Remaining 90% of viewport height */
+    width: 100vh;
 }
 
 /* Scoreboard: 3/10 of viewport height */

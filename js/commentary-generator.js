@@ -22,7 +22,7 @@ function isEmptyValue(value) {
  */
 function wrapPlayer(name, teamCode) {
   if (!name) return '';
-  return `<span class="player-name team-${teamCode}">${name}</span>`;
+  return `<span class="comment-player team-${teamCode}">${name}</span>`;
 }
 
 /**
@@ -109,6 +109,13 @@ const COMMENT_TEMPLATES = {
       '{player} échoue dans sa passe',
       'La passe de {player} ne trouve personne'
     ],
+    'Self': [  // Nouveau template pour l'auto-passe
+      '{player} dribble et hésite...',
+      '{player} remonte le terrain',
+      '{player} temporise',
+      '{player} cherche une ouverture',
+      '{player} garde la possession'
+    ],
     default: [
       'Shoot à {pts}PT de {player}...',
       '{player} tente un shoot à {pts}PT...',
@@ -149,7 +156,7 @@ const COMMENT_TEMPLATES = {
       '{player} loupe son shoot à {pts}PT',
       'Le ballon sort du cercle, échec de {player}'
     ],
-    Blocked: [
+    'Blocked': [
       '{player} se fait  <span class="block">contrer !</span>',
       '<span class="block">Contre</span>  sur le tir de {player} à {pts}PT',
       'Tir de {player}  <span class="block"> bloqué net !</span>',
@@ -172,10 +179,21 @@ function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+// Variable pour suivre si le premier message a été affiché
+let debutMatchAffiche = false;
+
 function buildComment(evt, nextEvt) {
+  // DEBUG
+  console.log('buildComment - START =====================');
+  console.log('commentaire-Equipe:', evt['commentaire-Equipe']);
+  console.log('commentaire-Joueur:', evt['commentaire-Joueur']);
+  console.log('commentaire-Situation:', evt['commentaire-Situation']);
+  console.log('scoreboard-Etape:', evt['scoreboard-Etape']);
+  
   // Gestion spéciale pour le coup d'envoi et la fin de match
-  if (evt['scoreboard-Etape'] === 0) {
-    return "Coup d'envoi du match !";
+  if (evt['scoreboard-Etape'] === 0 || evt['scoreboard-Etape'] === '0') {
+    // Ne rien afficher de spécial au début du match
+    return "Début du match !";
   }
   if (evt['scoreboard-Etape'] === 701) {
     return "Fin du match ! Merci d'avoir suivi cette rencontre.";
@@ -185,8 +203,22 @@ function buildComment(evt, nextEvt) {
   const templates = COMMENT_TEMPLATES[situation];
   if (!templates) return '';
   
-  // Utiliser la fonction utilitaire au lieu de la condition simple
-  const list = (!isEmptyValue(result) && templates[result]) || templates.default;
+  // Vérifier si c'est une auto-passe (même joueur, possession consécutive)
+  const isSelfPass = 
+    situation === 'Possession' && 
+    result === 'Succès' && 
+    nextEvt['commentaire-Situation'] === 'Possession' &&
+    evt['commentaire-Joueur'] === nextEvt['commentaire-Joueur'] &&
+    evt['commentaire-Equipe'] === nextEvt['commentaire-Equipe'];
+  
+  // Choisir la liste de templates appropriée
+  let list;
+  if (isSelfPass) {
+    list = templates['Self'];
+  } else {
+    list = (!isEmptyValue(result) && templates[result]) || templates.default;
+  }
+  
   if (!list) return '';
   let tpl = pick(list);
   
@@ -198,11 +230,21 @@ function buildComment(evt, nextEvt) {
     points = detectShotType(nextEvt);
   }
   
-  return tpl
+  // DEBUG avant le remplacement final
+  console.log('Template avant remplacement:', tpl);
+  console.log('Points détectés:', points);
+  console.log('getTeamName retourne:', getTeamName(evt['commentaire-Equipe']));
+  
+  const finalComment = tpl
     .replace('{player}', evt['commentaire-Joueur'] || '')
     .replace('{nextPlayer}', nextEvt['commentaire-Joueur'] || '')
     .replace('{pts}', points)
     .replace('{team}', getTeamName(evt['commentaire-Equipe']));
+  
+  console.log('Commentaire final:', finalComment);
+  console.log('buildComment - END =====================');
+  
+  return finalComment;
 }
 
 function detectShotType(evt) {
@@ -215,7 +257,33 @@ function detectShotType(evt) {
 }
 
 function getTeamName(code) {
-  return code === 'A' ? 'Gaus-Spurs' : 'Bear Hodlers';
+  // Debug
+  console.log(`getTeamName appelé avec code: '${code}'`);
+  
+  if (code === 'A') {
+    // Utiliser directement le texte affiché dans le sélecteur
+    const selectElement = document.getElementById('team-a-select');
+    if (selectElement && selectElement.selectedIndex >= 0) {
+      // Récupérer le texte de l'option sélectionnée
+      const selectedText = selectElement.options[selectElement.selectedIndex].text;
+      return selectedText || 'Gaus Spurs';
+    }
+    return 'Gaus Spurs';
+    
+  } else if (code === 'B') {
+    // Utiliser directement le texte affiché dans le sélecteur
+    const selectElement = document.getElementById('team-b-select');
+    if (selectElement && selectElement.selectedIndex >= 0) {
+      // Récupérer le texte de l'option sélectionnée
+      const selectedText = selectElement.options[selectElement.selectedIndex].text;
+      return selectedText || 'Bear Hodlers';
+    }
+    return 'Bear Hodlers';
+  }
+  
+  // Si aucun code valide n'est fourni
+  console.warn(`Code d'équipe non reconnu: '${code}'`);
+  return code === '' ? 'Équipe' : (code || 'Équipe');
 }
 
 /**

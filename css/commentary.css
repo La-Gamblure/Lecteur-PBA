@@ -70,32 +70,33 @@
 }
 
 /* =============================
-   5. Style des noms de joueurs
+   5. Style des noms de joueurs dans les commentaires
    ============================= */
-.player-name {
-    padding: 0.1rem 0.3rem;
-    border-radius: 3px;
+.comment-player {
+    padding: 4px 6px;
+    border-radius: 10px;
     font-weight: 700;
-    margin-right: 0.2rem;
+    margin: 4px;
 }
 
-.player-name.team-A {
+.comment-player.team-A {
     background-color: #706FD6;   /* bleu pour l’équipe A */
     color: #fff;
 }
 
-.player-name.team-B {
+.comment-player.team-B {
     background-color: #D65F5F;   /* orange pour l’équipe B */
     color: #fff;
 }
 
 /* Badge de base amélioré */
 .block {
-    background: linear-gradient(135deg, #ff0000, #ff3333);
+    background: linear-gradient(135deg, #1d47c7, #4c36b9);
     color: #ffffff;
     text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-    padding: 0.1em 0.3em;
+    padding: 0.1em 0.1em;
     border-radius: 15px;
+    margin: 4px;
     font-weight: bold;
     box-shadow: 0 0 10px rgba(255,0,0,0.3);
     display: inline-block;
@@ -109,13 +110,14 @@
     background: linear-gradient(135deg, #00ff00, #33ff33);
     color: #ffffff;
     text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-    padding: 0.1em 0.3em;
+    padding: 0.1em 0.1em;
     border-radius: 15px;
     font-weight: bold;
     box-shadow: 0 0 10px rgba(0,255,0,0.3);
     display: inline-block;
     position: relative;
     overflow: hidden;
+    margin: 4px;
     border: 1px solid rgba(255,255,255,0.3);
     animation: pointsAnimation 0.5s infinite alternate;
 }
