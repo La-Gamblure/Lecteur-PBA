@@ -80,13 +80,37 @@
 }
 
 .comment-player.team-A {
-    background-color: #706FD6;   /* bleu pour l’équipe A */
-    color: #fff;
+    background-color: var(--team-a-primary);   /* utilisation de la variable CSS */
+    color: var(--team-a-secondary);
 }
 
 .comment-player.team-B {
-    background-color: #D65F5F;   /* orange pour l’équipe B */
-    color: #fff;
+    background-color: var(--team-b-primary);   /* utilisation de la variable CSS */
+    color: var(--team-b-secondary);
+}
+
+/* Style pour les noms d'équipes dans les commentaires */
+.teamtag {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 700;
+    margin: 0 4px;
+    display: inline-block;
+    border: 2px solid;
+}
+
+/* Pour l'équipe A */
+.generated-comment:has(.team-A) .teamtag {
+    background-color: var(--team-a-primary);
+    color: var(--team-a-secondary);
+    border-color: var(--team-a-secondary);
+}
+
+/* Pour l'équipe B */
+.generated-comment:has(.team-B) .teamtag {
+    background-color: var(--team-b-primary);
+    color: var(--team-b-secondary);
+    border-color: var(--team-b-secondary);
 }
 
 /* Badge de base amélioré */
@@ -121,3 +145,6 @@
     border: 1px solid rgba(255,255,255,0.3);
     animation: pointsAnimation 0.5s infinite alternate;
 }
+
+.teamtag {
+    

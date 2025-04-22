@@ -1,4 +1,13 @@
 /* Scoreboard styling */
+:root {
+    --team-a-primary: #706FD6;
+    --team-a-secondary: #FFFFFF;
+    --team-a-tertiary: #004D87;
+    --team-b-primary: #D65F5F;
+    --team-b-secondary: #FFFFFF;
+    --team-b-tertiary: #553311;
+}
+
 .scoreboard {
     display: flex;
     justify-content: space-between;
@@ -22,13 +31,17 @@
     position: absolute;
     top: 0;
     height: 100%;
-    width: 15px;
+    width: 20px;
+    border-width: 4px;
+    border-style: solid;
+    border-color: transparent;
 }
 
 /* Bandeau gauche - couleur équipe A */
 .scoreboard::before {
     left: 0;
-    background-color: #6f6fd6; /* Même couleur que team-a */
+    background-color: var(--team-a-primary); /* Utilisation de la variable CSS */
+    border-right-color: var(--team-a-secondary); /* Bordure droite uniquement */
     border-top-left-radius: 12px;
     border-bottom-left-radius: 12px;
 }
@@ -36,7 +49,8 @@
 /* Bandeau droit - couleur équipe B */
 .scoreboard::after {
     right: 0;
-    background-color: #d65f5f; /* Même couleur que team-b */
+    background-color: var(--team-b-primary); /* Utilisation de la variable CSS */
+    border-left-color: var(--team-b-secondary); /* Bordure gauche uniquement */
     border-top-right-radius: 12px;
     border-bottom-right-radius: 12px;
 }
@@ -47,6 +61,19 @@
     flex-direction: column;
     align-items: center;
     width: 30%;
+    background-color: transparent !important; /* S'assurer qu'aucun changement global n'affecte le fond */
+}
+
+/* S'assurer que les éléments du scoreboard ne sont pas affectés par les styles des tableaux */
+.scoreboard .team,
+.scoreboard .team-a,
+.scoreboard .team-b,
+.scoreboard #team-a-box,
+.scoreboard #team-b-box,
+#team-a-box,
+#team-b-box {
+    background-color: transparent !important;
+    color: inherit !important;
 }
 
 .team-logo {

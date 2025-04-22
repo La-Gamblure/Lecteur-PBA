@@ -68,12 +68,14 @@ body {
 
 .container {
     width: 100%;
-    max-width: 1200px;
+    max-width: 2100px;
+    min-width: 1200px;
     margin: 0 auto;
     padding: 0 1rem;
     flex: 1;
     display: flex;
     flex-direction: column;
+    align-self: center; /* Assure le centrage du conteneur */
 }
 
 .main-content {
@@ -81,8 +83,8 @@ body {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    height: 100vh; /* Remaining 90% of viewport height */
-    width: 100vh;
+    height: 90vh; /* Remaining 90% of viewport height */
+    width: 100%; /* Correction: utiliser 100% au lieu de 100vh */
 }
 
 /* Scoreboard: 3/10 of viewport height */

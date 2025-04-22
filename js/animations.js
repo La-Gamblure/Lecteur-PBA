@@ -39,25 +39,95 @@ function initPreviousValues() {
  * Met en évidence les cellules dont la valeur a changé
  * @param {HTMLElement} cell - La cellule à vérifier
  */
+/**
+ * Met en surbrillance une cellule dont la valeur a changé
+ * @param {HTMLElement} cell - La cellule à animer
+ */
 function highlightChangedCell(cell) {
+    // Stocker les informations de la cellule pour le suivi
     const rowIndex = cell.parentElement.rowIndex;
     const cellIndex = cell.cellIndex;
     const key = `${rowIndex}-${cellIndex}`;
     const currentValue = cell.textContent || '0';
     
-    // Vérifier si la valeur a changé
-    if (previousStatsValues[key] !== currentValue) {
-        // Appliquer l'animation de highlight
-        cell.classList.add('stat-highlight');
-        
-        // Retirer la classe après l'animation
-        setTimeout(() => {
-            cell.classList.remove('stat-highlight');
-        }, 1000);
-        
-        // Mettre à jour la valeur précédente
-        previousStatsValues[key] = currentValue;
+    // Si la valeur n'a pas changé, ne pas faire d'animation
+    if (previousStatsValues[key] === currentValue) {
+        return;
     }
+    
+    // Si la valeur a augmenté
+    const prevValue = parseFloat(previousStatsValues[key] || '0');
+    const newValue = parseFloat(currentValue || '0');
+    const valueIncreased = newValue > prevValue;
+    
+    // Si l'animation est déjà en cours, la réinitialiser
+    if (cell.classList.contains('stat-highlight')) {
+        cell.classList.remove('stat-highlight');
+        // Force un reflow pour redémarrer correctement l'animation
+        void cell.offsetWidth; 
+    }
+    
+    // Sauvegarder les styles originaux avant l'animation
+    const originalBackgroundColor = cell.style.backgroundColor;
+    const originalTextColor = cell.style.color;
+    const originalWeight = cell.style.fontWeight;
+    
+    // Appliquer l'animation de highlight
+    cell.classList.add('stat-highlight');
+    
+    // Ajouter un texte +1, +2, etc. flottant au-dessus de la cellule si la valeur a augmenté
+    if (valueIncreased) {
+        const difference = newValue - prevValue;
+        if (difference > 0) {
+            // Créer un élément flottant pour montrer l'incrémentation
+            const floatingText = document.createElement('div');
+            floatingText.textContent = `+${difference}`;
+            floatingText.style.position = 'absolute';
+            floatingText.style.top = '-20px';
+            floatingText.style.left = '50%';
+            floatingText.style.transform = 'translateX(-50%)';
+            floatingText.style.color = 'gold';
+            floatingText.style.fontWeight = 'bold';
+            floatingText.style.textShadow = '0 0 3px black';
+            floatingText.style.zIndex = '100';
+            floatingText.style.pointerEvents = 'none';
+            floatingText.style.animation = 'float-up 1.5s ease-out forwards';
+            
+            // Ajouter le style d'animation s'il n'existe pas déjà
+            if (!document.querySelector('#float-animation')) {
+                const style = document.createElement('style');
+                style.id = 'float-animation';
+                style.innerHTML = `
+                    @keyframes float-up {
+                        0% { opacity: 1; transform: translate(-50%, 0); }
+                        100% { opacity: 0; transform: translate(-50%, -30px); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            // Position relative pour le parent
+            cell.style.position = 'relative';
+            
+            // Ajouter l'élément au DOM
+            cell.appendChild(floatingText);
+            
+            // Supprimer l'élément après l'animation
+            setTimeout(() => {
+                if (floatingText.parentNode === cell) {
+                    cell.removeChild(floatingText);
+                }
+            }, 1500);
+        }
+    }
+    
+    // Retirer la classe après l'animation et restaurer les styles originaux
+    setTimeout(() => {
+        cell.classList.remove('stat-highlight');
+    }, 1000);
+    
+    // Mettre à jour la valeur précédente
+    previousStatsValues[key] = currentValue;
 }
 
 /**
