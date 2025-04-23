@@ -4,9 +4,9 @@
         "name": "Oko Rockets",
         "shortName": "Rockets",
         "logo": "oko-rockets-logo.png",
-        "primaryColor": "#323337",
-        "secondaryColor": "#850F24",
-        "tertiaryColor": "#222222",
+        "primaryColor": "#850F21",
+        "secondaryColor": "#F8ECDC",
+        "tertiaryColor": "#121D24",
         "font": "Orbitron",
         "players": [
           "Arteka56", "Théguils", "JeanTaur", "Tonton", "Dilon Bricks"
@@ -17,8 +17,8 @@
         "shortName": "Can Heat Balls",
         "logo": "can-heat-balls-logo.png",
         "primaryColor": "#9E171A",
-        "secondaryColor": "#F1AA29",
-        "tertiaryColor": "#FFFF00",
+        "secondaryColor": "#F2AA2D",
+        "tertiaryColor": "#4D0E0C",
         "font": "Bangers",
         "players": [
           "backzylul", "Djetro", "wilfriedrp", "Teiqola", "Elodays"
@@ -30,7 +30,7 @@
         "logo": "gaus-spurs-logo.png",
         "primaryColor": "#A1A1A1",
         "secondaryColor": "#181816",
-        "tertiaryColor": "#FFFFFF",
+        "tertiaryColor": "#181816",
         "font": "Bebas Neue",
         "players": [
           "ElBoully", "SangoRiley", "Pic", "Simoul", "Ellie"
@@ -41,8 +41,8 @@
         "shortName": "68ers",
         "logo": "sigma-68ers-logo.png",
         "primaryColor": "#CD2836",
-        "secondaryColor": "#0F2B5B",
-        "tertiaryColor": "#FFFFFF",
+        "secondaryColor": "#FFFFFF",
+        "tertiaryColor": "#0F2B5B",
         "font": "Archivo Black",
         "players": [
           "Da Pounce", "JLGO", "Yahiko", "Manu Ginobili II", "Fab"
@@ -52,9 +52,9 @@
         "name": "Tuah Hawks",
         "shortName": "Hawks",
         "logo": "tuah-hawks-logo.png",
-        "primaryColor": "#4E9AA6",
-        "secondaryColor": "#B7B6B4",
-        "tertiaryColor": "#004D87",
+        "primaryColor": "#4E99A6",
+        "secondaryColor": "#FFFFFF",
+        "tertiaryColor": "#1C6281",
         "font": "Oswald",
         "players": [
           "as2pike", "Sphynx787", "Fajitas33", "Crabou", "Tng10"
@@ -65,8 +65,8 @@
         "shortName": "Bears",
         "logo": "bear-hodlers-logo.png",
         "primaryColor": "#243F58",
-        "secondaryColor": "#E5A83C",
-        "tertiaryColor": "#553311",
+        "secondaryColor": "#D9CEB6",
+        "tertiaryColor": "#E5A83C",
         "font": "Teko",
         "players": [
           "Rzh", "TankRomagnoli", "brice4307", "Bueno2So", "IamNickColt"
@@ -78,7 +78,7 @@
         "logo": "burnt-dinosaurs-logo.png",
         "primaryColor": "#006633",
         "secondaryColor": "#FF6600",
-        "tertiaryColor": "#FFCC00",
+        "tertiaryColor": "#000E00",
         "font": "Staatliches",
         "players": [
           "matgt", "Sparfou", "KingFire", "p0uet21", "Scredss"
@@ -89,8 +89,8 @@
         "shortName": "Demons",
         "logo": "ocean-demons-logo.png",
         "primaryColor": "#7E2CBA",
-        "secondaryColor": "#C58C02",
-        "tertiaryColor": "#00B2EE",
+        "secondaryColor": "#F5EA72",
+        "tertiaryColor": "#F5EA72",
         "font": "Creepster",
         "players": [
           "BuzzerBeater", "PetiteJuju", "ShaadowStorme", "Locksyn", "Wayk00"
@@ -100,9 +100,9 @@
         "name": "Bos Storm Troopers",
         "shortName": "Troopers",
         "logo": "bos-storm-troopers-logo.png",
-        "primaryColor": "#3E4825",
-        "secondaryColor": "#D38E41",
-        "tertiaryColor": "#888888",
+        "primaryColor": "#394840",
+        "secondaryColor": "#D69140",
+        "tertiaryColor": "#D69140",
         "font": "Rajdhani",
         "players": [
           "Seyars27", "Coconuts", "wazoolevrai", "Batigoal", "2b2a"
@@ -112,9 +112,9 @@
         "name": "FOMO Princes",
         "shortName": "Princes",
         "logo": "fomo-princes-logo.png",
-        "primaryColor": "#6F4191",
-        "secondaryColor": "#B68E30",
-        "tertiaryColor": "#FFFFFF",
+        "primaryColor": "#56387B",
+        "secondaryColor": "#D7C5A0",
+        "tertiaryColor": "#202E49", 
         "font": "Cinzel",
         "players": [
           "Schuriken", "Elgaborracho", "Luc813", "Sdely", "RogerPalaref"
@@ -125,8 +125,8 @@
         "shortName": "Hornets",
         "logo": "mosquit-hornets-logo.png",
         "primaryColor": "#97BDC5",
-        "secondaryColor": "#10495E",
-        "tertiaryColor": "#D1E8E2",
+        "secondaryColor": "#124762",
+        "tertiaryColor": "#124762",
         "font": "Saira Condensed",
         "players": [
           "MaximeS28", "lepil", "Michel pinto", "kaiser06", "Sorarecaillard"

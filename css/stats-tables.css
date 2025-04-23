@@ -226,12 +226,7 @@
     box-sizing: border-box;
   }
 
-  /* Style spécifique pour la cellule du logo Tuah Hawks */
-  .team-label img[src*="tuah-hawks-logo"] {
-    background-color: white;
-    border-radius: 50%;
-    padding: 5px;
-  }
+ 
   
   /* Style pour le tag MVP */
   .mvp-tag {
@@ -276,13 +271,22 @@
     font-weight: normal;
 }
 
+/* Style pour doubledouble selon l'équipe */
+.team-a-table .doubledouble {
+    border: 2px solid var(--team-a-tertiary);
+}
+
+.team-b-table .doubledouble {
+    border: 2px solid var(--team-b-tertiary);
+}
+
 .doubledouble.active {
     /* Style quand différent de 0 */
     background: linear-gradient(45deg, #4caf50, #8bc34a);
     color: #ffffff;
     font-weight: bold;
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-    border: 2px solid #69f0ae;
+    border: 2px solid #69f0ae !important;
     box-shadow: 0 0 15px rgba(76, 175, 80, 0.7);
     animation: ddGlow 2s infinite alternate;
 }
@@ -363,11 +367,38 @@
     font-weight:800;
   }
   
+  /* Bordures spécifiques selon l'équipe */
+  .team-a-table .player-name {
+    border-right: 4px solid var(--team-a-secondary)!important;
+  }
+  
+  .team-b-table .player-name {
+    border-right: 4px solid var(--team-b-secondary)!important;
+  }
+  
+  /* Effet de contour sur le texte avec -webkit-text-stroke */
+  .team-a-table td {
+    -webkit-text-stroke: 1px var(--team-a-tertiary);
+  }
+  
+  .team-b-table td {
+    -webkit-text-stroke: 1px var(--team-b-tertiary);
+  }
+  
   /* === Utilisation des variables CSS pour les couleurs de fond === */
   /* Les styles sont maintenant définis en haut du fichier avec des variables */
   
   /* colonne TOTAL → même couleur que le reste, mais gras */
   #stats-table td:last-child { font-weight:700; }
+  
+  /* Bordures de la colonne TOTAL */
+  .team-a-table .total-cell { 
+    border-left: 4px solid var(--team-a-secondary)!important; 
+  }
+  
+  .team-b-table .total-cell{ 
+    border-left: 4px solid var(--team-b-secondary)!important; 
+  }
   
   /* === effet hover optionnel === */
   #stats-table tr:hover td {
@@ -380,3 +411,11 @@
     background:#64ffda;
     border-radius:4px;
   }
+
+.team-a-table{
+    border: 4px solid var(--team-a-secondary);
+}
+
+.team-b-table{
+    border: 4px solid var(--team-b-secondary);
+}

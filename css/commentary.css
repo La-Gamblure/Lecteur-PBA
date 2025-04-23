@@ -146,5 +146,10 @@
     animation: pointsAnimation 0.5s infinite alternate;
 }
 
-.teamtag {
-    
+.team-a-table{
+    border: 4px solid var(--team-a-secondary);
+}
+
+.team-b-table{
+    border: 4px solid var(--team-b-secondary);
+}
