@@ -253,8 +253,8 @@
 
 .turnover.active {
     /* Style quand différent de 0 */
-    background-color: rgba(50, 50, 50, 0.8);
-    color: #ff8a80;
+    background-color: rgba(50, 50, 50, 0.8) !important;
+    color: #ff8a80 !important;
     font-weight: bold;
     border: 1px solid rgba(255, 100, 100, 0.5);
 }
