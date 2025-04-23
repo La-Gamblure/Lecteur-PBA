@@ -112,24 +112,8 @@ function renderComments(timeline, containerSelector = '#comments') {
     const p = document.createElement('p');
     p.className = 'generated-comment';
 
-    // Enrobe les noms de joueurs
-    let html = text;
-    const playerName = evt['commentaire-Joueur'] || '';
-    if (playerName) {
-      html = html.replace(
-        new RegExp(`\\b${escapeRegExp(playerName)}\\b`, 'g'),
-        wrapPlayer(playerName, evt['commentaire-Equipe'])
-      );
-    }
-    const nextName = (plays[idx + 1] || {})['commentaire-Joueur'] || '';
-    const nextTeam = (plays[idx + 1] || {})['commentaire-Equipe'] || '';
-    if (nextName) {
-      html = html.replace(
-        new RegExp(`\\b${escapeRegExp(nextName)}\\b`, 'g'),
-        wrapPlayer(nextName, nextTeam)
-      );
-    }
-    p.innerHTML = html;
+    // Les noms des joueurs sont déjà encapsulés dans buildComment
+    p.innerHTML = text;
 
     // Appliquer style succès/échec uniquement sur Shoot
     if (evt['commentaire-Situation'] === 'Shoot') {
@@ -234,6 +218,12 @@ function pick(arr) {
 // Variable pour suivre si le premier message a été affiché
 let debutMatchAffiche = false;
 
+// Fonction pour encapsuler un nom de joueur avec les styles d'équipe
+function wrapPlayer(name, teamCode) {
+  if (!name) return '';
+  return `<span class="comment-player team-${teamCode}">${name}</span>`;
+}
+
 function buildComment(evt, nextEvt) {
   // DEBUG
   console.log('buildComment - START =====================');
@@ -288,8 +278,8 @@ function buildComment(evt, nextEvt) {
   console.log('getTeamName retourne:', getTeamName(evt['commentaire-Equipe']));
   
   const finalComment = tpl
-    .replace('{player}', evt['commentaire-Joueur'] || '')
-    .replace('{nextPlayer}', nextEvt['commentaire-Joueur'] || '')
+    .replace('{player}', wrapPlayer(evt['commentaire-Joueur'], evt['commentaire-Equipe']))
+    .replace('{nextPlayer}', wrapPlayer(nextEvt['commentaire-Joueur'], nextEvt['commentaire-Equipe']))
     .replace('{pts}', points)
     .replace('{team}', getTeamName(evt['commentaire-Equipe']));
   

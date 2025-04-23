@@ -263,33 +263,13 @@ function updateDisplay(rowIndex) {
       if (res === 'Succès')      p.classList.add('shoot-success');
       else if (res === 'Echec' || res === 'Blocked') p.classList.add('shoot-failure');
     }
-  
-    // Construire le HTML avec spans pour les joueurs
-    let html = row.generatedComment;
-  
-    // Joueur courant
-    const player = row['commentaire-Joueur'] || '';
-    const team   = row['commentaire-Equipe'] || '';
-    if (player) {
-      const reP = new RegExp(`\\b${player}\\b`, 'g');
-      html = html.replace(reP, wrapPlayer(player, team));
-    }
-  
-    // Joueur suivant
-    const np    = nextRow['commentaire-Joueur'] || '';
-    const nTeam = nextRow['commentaire-Equipe']   || '';
-    if (np) {
-      const reN = new RegExp(`\\b${np}\\b`, 'g');
-      html = html.replace(reN, wrapPlayer(np, nTeam));
-    }
-  
-    p.innerHTML = html;
+
+    // Les noms des joueurs sont déjà encapsulés dans buildComment
+    p.innerHTML = row.generatedComment;
     commentsBox.appendChild(p);
   }
   
-
-/**
- * Met à jour le scoreboard avec les données de la ligne
+  /** Met à jour le scoreboard avec les données de la ligne
  * @param {Object} row - Données de la ligne
  */
 function updateScoreboard(row) {

@@ -77,16 +77,19 @@
     border-radius: 10px;
     font-weight: 700;
     margin: 4px;
+    /* Pas de bordure générique ici */
 }
 
 .comment-player.team-A {
     background-color: var(--team-a-primary);   /* utilisation de la variable CSS */
     color: var(--team-a-secondary);
+    border: 2px solid var(--team-a-secondary);
 }
 
 .comment-player.team-B {
     background-color: var(--team-b-primary);   /* utilisation de la variable CSS */
     color: var(--team-b-secondary);
+    border: 2px solid var(--team-b-secondary);
 }
 
 /* Style pour les noms d'équipes dans les commentaires */
@@ -96,7 +99,7 @@
     font-weight: 700;
     margin: 0 4px;
     display: inline-block;
-    border: 2px solid;
+    border: 6px solid;
 }
 
 /* Pour l'équipe A */
@@ -146,10 +149,3 @@
     animation: pointsAnimation 0.5s infinite alternate;
 }
 
-.team-a-table{
-    border: 4px solid var(--team-a-secondary);
-}
-
-.team-b-table{
-    border: 4px solid var(--team-b-secondary);
-}
