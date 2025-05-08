@@ -186,10 +186,10 @@ const COMMENT_TEMPLATES = {
   },
   Shoot: {
     'Succès': [
-      "Et ça rentre pour {player} !  <span class=\"points\">+{pts}PT</span>  pour les <span class=\"teamtag\">{team}</span> !",
+      "Et ça rentre pour {player} !     <span class=\"points\">+{pts}PT</span>  pour les <span class=\"teamtag\">{team}</span> !",
       '{player} marque à  <span class=\"points\">{pts}PT</span>  et fait briller les <span class=\"teamtag\">{team}</span> !',
-      'Panier de {player} !  <span class=\"points\">+{pts}PT</span>  pour les <span class=\"teamtag\">{team}</span>',
-      '{player} fait mouche !  <span class=\"points\">+{pts}PT</span>  pour les <span class=\"teamtag\">{team}</span>',
+      'Panier de {player} !     <span class=\"points\">+{pts}PT</span>  pour les <span class=\"teamtag\">{team}</span>',
+      '{player} fait mouche !     <span class=\"points\">+{pts}PT</span>  pour les <span class=\"teamtag\">{team}</span>',
       'Superbe shoot de {player} et  <span class=\"points\">+{pts}PT</span>  pour les <span class=\"teamtag\">{team}</span> !'
     ],
     'Echec': [
