@@ -96,7 +96,7 @@ async function transformExcel(input, options = {}) {
     // Construction de la nouvelle ligne d'en-têtes
     const headers = [
       'scoreboard-QT', 'scoreboard-Temps', 'scoreboard-Etape',
-      'commentaire-Situation', 'commentaire-Joueur', 'commentaire-Equipe', 'commentaire-Succes'
+      'commentaire-Situation', 'commentaire-Joueur', 'commentaire-Equipe', 'Test 2-3 PT', 'commentaire-Succes'
     ];
     for (const pid of playerIds) {
       for (const stat of statTypes) {
@@ -104,17 +104,15 @@ async function transformExcel(input, options = {}) {
       }
     }
 
-    // Force le nombre de colonnes à la taille des headers
-    worksheet.columns = new Array(headers.length).fill({});
-    // Écrase la première ligne avec les bons headers (compatible ExcelJS)
+    // Remplacer l'en-tête sans réallouer toutes les colonnes (optimisé)
     const row1 = worksheet.getRow(1);
-    for (let i = 0; i < headers.length; i++) {
-      row1.getCell(i + 1).value = headers[i];
-    }
+    headers.forEach((h, idx) => {
+      row1.getCell(idx + 1).value = h;
+    });
     row1.commit();
-    // (Optionnel) Truncate extra colonnes si besoin (inutile car columns est forcé)
 
-
+    // NOTE : On ne touche plus aux autres lignes ni à worksheet.columns pour éviter un traitement lourd
+    // Les colonnes manquantes seront gérées lors de la conversion JSON (valeur vide par défaut)
 
     console.log('Transformation terminée sur', worksheet.name);
     return workbook;
@@ -239,4 +237,3 @@ if (typeof window !== 'undefined') {
     saveJson
   };
 }
-

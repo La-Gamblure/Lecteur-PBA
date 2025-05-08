@@ -291,114 +291,34 @@ function buildComment(evt, nextEvt) {
 
 // Cette fonction est appelée dans buildComment avec l'événement actuel
 function detectShotType(evt) {
-  // Vérifier si nous avons accès à la timeline globale
-  if (!window.jsonData || !window.jsonData.length) {
-    console.log('Données timeline non disponibles, utilisation de la détection par défaut');
-    return 2; // Valeur par défaut si les données ne sont pas disponibles
-  }
-  
-  console.log('detectShotType - Analyse du tir', evt);
-  
-  // Obtenir l'étape actuelle et l'équipe qui a tiré
-  const currentStep = parseInt(evt['scoreboard-Etape'] || '0', 10);
-  const shootingTeam = evt['commentaire-Equipe'] || '';
-  
-  if (isNaN(currentStep) || !shootingTeam) {
-    console.log('Informations insuffisantes pour déterminer le type de tir');
-    return 2;
-  }
-  
-  // Trouver l'événement précédent dans la timeline
-  let prevEvent = null;
-  for (let i = 0; i < window.jsonData.length; i++) {
-    const step = parseInt(window.jsonData[i]['scoreboard-Etape'] || '0', 10);
-    if (step === currentStep - 1) {
-      prevEvent = window.jsonData[i];
-      break;
+  // 1. Utiliser directement la colonne simplifiée uniquement pour les Shoot
+  if (evt['commentaire-Situation'] === 'Shoot') {
+    const directVal = parseInt(evt['Test 2-3 PT'], 10);
+    if (directVal === 2 || directVal === 3) {
+      return directVal;
     }
   }
-  
-  // Si pas d'événement précédent, on utilise 2 points par défaut
-  if (!prevEvent) {
-    console.log('Pas d\'\u00e9vénement précédent trouvé');
-    return 2;
-  }
-  
-  console.log('detectShotType - Événement précédent trouvé:', prevEvent);
-  
-  // Chercher les champs de score dans les deux événements
-  const scoreFields = {
-    'A': ['Score cumulé Equipe A', 'Score-A', 'ScoreA', 'scoreboard-ScoreA', 'A-Score'],
-    'B': ['Score cumulé Equipe B', 'Score-B', 'ScoreB', 'scoreboard-ScoreB', 'B-Score']
-  };
-  
-  const teamKey = shootingTeam;
-  
-  // Parcourir les champs de score possibles pour l'équipe qui a tiré
-  let prevScore = 0;
-  let currentScore = 0;
-  
-  for (const field of scoreFields[teamKey]) {
-    if (field in evt && field in prevEvent) {
-      prevScore = parseInt(prevEvent[field] || '0', 10);
-      currentScore = parseInt(evt[field] || '0', 10);
-      
-      if (!isNaN(prevScore) && !isNaN(currentScore)) {
-        break; // On a trouvé des scores valides
-      }
-    }
-  }
-  
-  // Déterminer le type de tir basé sur la différence de score
-  const scoreDiff = currentScore - prevScore;
-  
-  console.log(`Score de l'équipe ${teamKey}: ${prevScore} -> ${currentScore} (diff: ${scoreDiff})`);
-  
-  if (scoreDiff === 3) {
-    console.log('Tir à 3 points détecté par différence de score');
-    return 3;
-  } else if (scoreDiff === 2) {
-    console.log('Tir à 2 points détecté par différence de score');
-    return 2;
-  }
-  
-  // Si la différence n'est pas clairement identifiée, on vérifie aussi les statistiques
-  // Chercher les champs de 3 points
-  const patterns3pts = ['3[ -]?[Pp]oints', '3PT', '3[ -]?[Pp]ts', 'three'];
-  
-  for (let key in evt) {
-    for (let pattern of patterns3pts) {
-      if (new RegExp(pattern, 'i').test(key) && key in prevEvent) {
-        const prevVal = parseInt(prevEvent[key] || '0', 10);
-        const currentVal = parseInt(evt[key] || '0', 10);
-        
-        if (currentVal - prevVal === 1) {
-          console.log(`Statistique 3pts a augmenté: ${key} (${prevVal} -> ${currentVal})`);
-          return 3;
-        }
-      }
-    }
-  }
-  
-  // Vérifier explicitement les statistiques de tirs à 2 points
-  const patterns2pts = ['2[ -]?[Pp]oints', '2PT', '2[ -]?[Pp]ts', 'two'];
-  
-  for (let key in evt) {
-    for (let pattern of patterns2pts) {
-      if (new RegExp(pattern, 'i').test(key) && key in prevEvent) {
-        const prevVal = parseInt(prevEvent[key] || '0', 10);
-        const currentVal = parseInt(evt[key] || '0', 10);
-        
-        if (currentVal - prevVal === 2) {
-          console.log(`Statistique 2pts a augmenté: ${key} (${prevVal} -> ${currentVal})`);
-          return 2;
-        }
-      }
-    }
-  }
-  
-  // Par défaut, c'est un tir à 2 points
-  console.log('Type de tir non déterminé avec précision, utilisation de 2 points par défaut');
+
+  // 2. Fallback : calculer la différence de score par rapport à l'événement précédent
+  if (!Array.isArray(window.jsonData)) return 2; // Sécurité
+
+  const currentStep = Number(evt['scoreboard-Etape'] || 0);
+  const team = evt['commentaire-Equipe'];
+  if (!team || isNaN(currentStep)) return 2;
+
+  // Chercher l'événement précédent dans la timeline
+  const prevEvt = window.jsonData.find(e => Number(e['scoreboard-Etape']) === currentStep - 1);
+  if (!prevEvt) return 2;
+
+  const scoreKey = team === 'A' ? 'scoreboard-ScoreA' : 'scoreboard-ScoreB';
+  const prevScore = Number(prevEvt[scoreKey] || 0);
+  const curScore = Number(evt[scoreKey] || 0);
+  const diff = curScore - prevScore;
+
+  if (diff === 3) return 3;
+  if (diff === 2) return 2;
+
+  // 3. Par défaut (non déterminé)
   return 2;
 }
 
