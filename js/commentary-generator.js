@@ -133,10 +133,17 @@ const COMMENT_TEMPLATES = {
   Possession: {
     'Succès': [
       '{player} fait la passe à {nextPlayer}',
-      '{player} trouve {nextPlayer} sur une belle passe',
+      '{player} trouve {nextPlayer}',
       'Passe de {player} vers {nextPlayer}',
-      '{player} sert {nextPlayer} proprement',
-      '{player} decide d\'orienter vers {nextPlayer}'
+      '{player} sert {nextPlayer}',
+      '{player} oriente vers {nextPlayer}',
+      '{player} pour {nextPlayer}',
+      '{player} transmet à {nextPlayer}',
+      '{player} décale {nextPlayer}',
+      '{player} lance {nextPlayer}',
+      '{player} écarte vers {nextPlayer}',
+      '{player} trouve {nextPlayer}',
+      '{player} envoie vers {nextPlayer}'
     ],
     'Echec': [
       '{player} rate sa passe..',
