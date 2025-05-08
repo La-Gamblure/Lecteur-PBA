@@ -204,6 +204,7 @@ const COMMENT_TEMPLATES = {
       '{player} se fait  <span class="block">contrer !</span>',
       '<span class="block">Contre</span>  sur le tir de {player} à {pts}PT',
       'Tir de {player}  <span class="block"> bloqué net !</span>',
+      '<span class="block">Énorme contre</span> sur le shoot de {player}',
       'Le shoot de {player} est  <span class="block">stoppé</span>'
      
     ]
