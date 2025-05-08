@@ -133,16 +133,16 @@ const COMMENT_TEMPLATES = {
   Possession: {
     'Succès': [
       '{player} fait la passe à {nextPlayer}',
-      '{player} trouve {nextPlayer} grâce à une belle passe',
-      'Passe réussie de {player} vers {nextPlayer}',
+      '{player} trouve {nextPlayer} sur une belle passe',
+      'Passe de {player} vers {nextPlayer}',
       '{player} sert {nextPlayer} proprement',
-      '{player} distribue à {nextPlayer}'
+      '{player} decide d\'orienter vers {nextPlayer}'
     ],
     'Echec': [
-      '{player} fait une passe ratée...',
+      '{player} rate sa passe..',
       '{player} perd le ballon sur la passe',
       'Passe manquée de {player}',
-      '{player} échoue dans sa passe',
+      '{player} échoue sur sa passe',
       'La passe de {player} ne trouve personne'
     ],
     'Self': [  // Nouveau template pour l'auto-passe
@@ -150,7 +150,7 @@ const COMMENT_TEMPLATES = {
       '{player} remonte le terrain',
       '{player} temporise',
       '{player} cherche une ouverture',
-      '{player} garde la possession'
+      '{player} peine à trouver un partenaire'
     ],
     default: [
       'Shoot à {pts}PT de {player}...',
@@ -164,7 +164,7 @@ const COMMENT_TEMPLATES = {
       'Rebond pour {nextPlayer}',
       '{nextPlayer} capte le rebond',
       '{nextPlayer} arrache le rebond',
-      'Le rebond va à {nextPlayer}',
+      '{nextPlayer} s\'impose au rebond',
       '{nextPlayer} récupère le ballon'
     ]
   },
@@ -173,13 +173,13 @@ const COMMENT_TEMPLATES = {
       '{nextPlayer} intercepte la passe de {player}',
       '{player} se fait voler la balle par {nextPlayer}',
       '{nextPlayer} subtilise le ballon à {player}',
-      'Interception de {nextPlayer} sur {player}',
-      '{nextPlayer} coupe la trajectoire et récupère'
+      'Interception de {nextPlayer}',
+      '{nextPlayer} coupe la trajectoire de la balle'
     ]
   },
   Shoot: {
     'Succès': [
-      "C'est réussi pour {player} !  <span class=\"points\">+{pts}PT</span>  pour les <span class=\"teamtag\">{team}</span> !",
+      "Et ça rentre pour {player} !  <span class=\"points\">+{pts}PT</span>  pour les <span class=\"teamtag\">{team}</span> !",
       '{player} marque à  <span class=\"points\">{pts}PT</span>  et fait briller les <span class=\"teamtag\">{team}</span> !',
       'Panier de {player} !  <span class=\"points\">+{pts}PT</span>  pour les <span class=\"teamtag\">{team}</span>',
       '{player} fait mouche !  <span class=\"points\">+{pts}PT</span>  pour les <span class=\"teamtag\">{team}</span>',
@@ -189,8 +189,9 @@ const COMMENT_TEMPLATES = {
       "C'est raté pour {player}",
       '{player} manque son tir à {pts}PT',
       'Tir manqué de {player}',
-      '{player} loupe son shoot à {pts}PT',
-      'Le ballon sort du cercle, échec de {player}'
+      'Et c\'est loupé pour {player}, il est temps de dépenser du $PAD !',
+      '{player} manque son shoot à {pts}PT',
+      'Le ballon rebondi sur l\'anneau, échec de {player}'
     ],
     'Blocked': [
       '{player} se fait  <span class="block">contrer !</span>',
@@ -203,9 +204,11 @@ const COMMENT_TEMPLATES = {
   Block: {
     default: [
       '{nextPlayer} bloque le shoot de {player}',
+      '{nextPlayer} vient stopper {player}',
+      '{nextPlayer} s\'interpose sur le tir de {player}',
       '{player} se fait stopper par {nextPlayer}',
       'Contre de {nextPlayer} sur {player}',
-      '{nextPlayer} rejette le tir de {player}',
+      '{nextPlayer} repousse le shoot de {player}',
       'Magnifique block de {nextPlayer} face à {player}'
     ]
   }
