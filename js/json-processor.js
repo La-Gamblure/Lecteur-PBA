@@ -324,69 +324,36 @@ document.getElementById('timer').textContent = time;
  * @param {Object} row - Données de la ligne
  */
 function updatePossession(row) {
-    const teamCode = row['commentaire-Equipe'];
-    let possession = '';
-    
-    // Déterminer la possession selon l'équipe et la situation
-    const situation = row['commentaire-Situation'];
-    if (situation === 'Possession' || (situation && situation.toLowerCase() === "shoot")) {
-        possession = row['commentaire-Equipe'];
-    }
+    // Récupérer directement le code d'équipe (A ou B)
+    const possession = row['commentaire-Equipe'];
     
     // Log pour débogage - simplifié
     console.log('Mise à jour de la possession pour équipe:', possession);
     
-    updatePossessionIndicator(possession);
+    // Mise à jour de l'indicateur visuel
+    updateBallPossessionIndicator(possession);
 }
 
 /**
  * Met à jour l'indicateur de possession (ballon de basketball)
- * @param {string} possession - Valeur de la possession (nom de l'équipe qui a la possession)
+ * @param {string} possession - Code de l'équipe (A ou B) qui a la possession
  */
-function updatePossessionIndicator(possession) {
-    // Récupérer les éléments du DOM
-    const teamABox = document.getElementById('team-a-box');
-    const teamBBox = document.getElementById('team-b-box');
+function updateBallPossessionIndicator(possession) {
     const teamABall = document.getElementById('team-a-ball');
     const teamBBall = document.getElementById('team-b-ball');
-    const possessionA = document.getElementById('possession-a');
-    const possessionB = document.getElementById('possession-b');
-    
-    // Par défaut, masquer les indicateurs de possession
-    teamABox.classList.remove('has-possession');
-    teamBBox.classList.remove('has-possession');
-    
-    if (teamABall) teamABall.style.display = 'none';
-    if (teamBBall) teamBBall.style.display = 'none';
-    
-    if (possessionA) possessionA.style.display = 'none';
-    if (possessionB) possessionB.style.display = 'none';
-    
-    // Si pas de possession définie, retourner
-    if (!possession) return;
-    
-    // Récupérer les équipes sélectionnées
-    const teamASelect = document.getElementById('team-a-select');
-    const teamBSelect = document.getElementById('team-b-select');
-    
-    let teamAName = '';
-    let teamBName = '';
-    
-    if (teamASelect) teamAName = teamASelect.value;
-    if (teamBSelect) teamBName = teamBSelect.value;
-    
-    // Déterminer quelle équipe a la possession
-    if (possession === teamAName) {
-        // Équipe A a la possession
-        teamABox.classList.add('has-possession');
-        if (teamABall) teamABall.style.display = 'block';
-        if (possessionA) possessionA.style.display = 'block';
-    } else if (possession === teamBName) {
-        // Équipe B a la possession
-        teamBBox.classList.add('has-possession');
-        if (teamBBall) teamBBall.style.display = 'block';
-        if (possessionB) possessionB.style.display = 'block';
+
+    // Nettoyage : tout cacher
+    if (teamABall) teamABall.style.opacity = '0';
+    if (teamBBall) teamBBall.style.opacity = '0';
+
+    // Afficher le ballon approprié
+    if (possession === 'A' && teamABall) {
+        teamABall.style.opacity = '1';
+    } else if (possession === 'B' && teamBBall) {
+        teamBBall.style.opacity = '1';
     }
+    // Log pour suivi complet
+    console.log('[BallIndicator] possession =', possession);
 }
 
 /**

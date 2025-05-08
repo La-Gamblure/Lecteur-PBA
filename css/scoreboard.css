@@ -99,12 +99,49 @@
 
 /* Styles pour le ballon de basketball */
 .ball-container {
-    position: absolute;
-    top: -10px;
-    width: 40px;
-    height: 40px;
+    position: relative;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
     z-index: 10;
     transition: opacity 0.3s ease;
+}
+
+/* Par défaut, les ballons sont invisibles */
+#team-a-ball {
+    opacity: 0;
+}
+#team-b-ball {
+    opacity: 0;
+}
+
+/* Classe pour l'équipe qui a la possession (appliquée par le JS) */
+.has-possession .ball-container {
+    opacity: 1;
+}
+
+.ball-container img {
+    animation: bounce-ball 1.2s infinite cubic-bezier(.68,-0.55,.27,1.55);
+}
+
+@keyframes bounce-ball {
+    0%, 100% { transform: translateY(0); }
+    20% { transform: translateY(-10px); }
+    40% { transform: translateY(0); }
+    60% { transform: translateY(-6px); }
+    80% { transform: translateY(0); }
+}
+
+
+.ball-container#team-a-ball {
+    margin-right: 1.5rem;
+}
+
+.ball-container#team-b-ball {
+    margin-left: 1.5rem;
 }
 
 

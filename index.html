@@ -57,17 +57,24 @@
             <section class="section">
                 <div class="scoreboard">
                     <div class="team team-a" id="team-a-box">
+
                         <div class="team-logo">
                             <img src="https://placehold.co/100x100?text=A" alt="Team A Logo" class="team-logo-img" id="team-a-logo">
                                               </div>
+                    
                         <div class="team-score" id="team-a-score">0</div>
                       
                     </div>
+                    
                     
                       <!-- 
                         game-info contains the current quarter, timer, controls to play/pause/reset the game, 
                         and a step counter showing the current step and total steps.
                        -->
+                    <div class="ball-container" id="team-a-ball">
+    <img src="basketball.svg" alt="Possession Team A" style="width:100%;height:100%">
+</div>
+                    
                     <div class="game-info">
                         <div class="quarter" id="quarter">Q1</div>
                         <div class="timer" id="timer">12:00</div>
@@ -92,20 +99,30 @@
                                     <option value="8">x8</option>
                                 </select>
                             </div>
+                    
                         </div>
-                        <div class="step-counter" id="step-counter" style="display:none;">
+                    
+                        <div class="step-counter" id="step-counter">
                             <span id="current-step">0</span>/<span id="total-steps">0</span>
                         </div>
+                    
                         
                     </div>
                     
-                    <div class="team team-b" id="team-b-box">
+                    
+                    <!-- Ballon possession équipe B -->
+<div class="ball-container" id="team-b-ball">
+    <img src="basketball.svg" alt="Possession Team B" style="width:100%;height:100%">
+</div>
+<div class="team team-b" id="team-b-box">
                         <div class="team-logo">
                             <img src="https://placehold.co/100x100?text=B" alt="Team B Logo" class="team-logo-img" id="team-b-logo">
                             
                         </div>
+                    
                         <div class="team-score" id="team-b-score">0</div>
                                          </div>
+                    
                 </div>
             </section>
 
